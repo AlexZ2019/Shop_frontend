@@ -1,15 +1,16 @@
 import './App.css';
-import {ApolloProvider} from "@apollo/client";
-import {client} from "./Apollo/config";
-import {BrowserRouter} from "react-router-dom";
+import {ApolloClient, ApolloProvider, InMemoryCache} from "@apollo/client";
+
+const client = new ApolloClient({
+    uri: process.env.REACT_APP_API_PATH,
+    cache: new InMemoryCache()
+});
 
 function App() {
   return (
-      <ApolloProvider client={client}>
-          <BrowserRouter>
-              <div className="App">
-              </div>
-          </BrowserRouter>
+      <ApolloProvider client={client} >
+          <div className="App">
+          </div>
       </ApolloProvider>
   );
 }
