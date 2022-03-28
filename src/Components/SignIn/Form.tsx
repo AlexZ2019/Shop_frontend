@@ -2,6 +2,7 @@ import {Button, Form, Input} from "antd";
 import {SubmitHandler, useForm} from "react-hook-form";
 import {useMutation} from "@apollo/client";
 import {LOGIN} from "../../Apollo/mutations/login";
+import {storeData} from "../../helpers/localStorage";
 
 type Inputs = {
     email: string,
@@ -20,8 +21,11 @@ export const CustomForm = () => {
     const [login, { data, loading, error }] = useMutation(LOGIN);
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-        login({variables: data}).then(r => r)
-     }
+        login({variables: data}).then(r => {
+            storeData("accessToken", r.data.login.accessToken);
+            storeData("refreshToken", r.data.login.refreshToken);
+        });
+     };
 
     // @ts-ignore
     return <form onSubmit={handleSubmit(onSubmit)}>
