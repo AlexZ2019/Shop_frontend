@@ -10,7 +10,7 @@ type Inputs = {
 
 export const CustomForm = () => {
 
-    const {register, handleSubmit, watch, formState: {errors}} = useForm({
+    const {register, handleSubmit, formState: {errors}} = useForm({
         defaultValues: {
             email: '',
             password: ''
@@ -20,8 +20,7 @@ export const CustomForm = () => {
     const [login, { data, loading, error }] = useMutation(LOGIN);
 
     const onSubmit: SubmitHandler<Inputs> = (data) => {
-        console.log(data);
-        login({variables: data}).then(r => console.log(r))
+        login({variables: data}).then(r => r)
      }
 
     // @ts-ignore
