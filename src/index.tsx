@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {ApolloProvider} from "@apollo/client";
 import {client} from "./Apollo/config";
+import {ApolloProvider} from "@apollo/client";
 
 ReactDOM.render(
   <React.StrictMode>
