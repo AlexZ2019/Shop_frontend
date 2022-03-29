@@ -1,4 +1,4 @@
-import {storeData} from "../../helpers/localStorage";
+import {setLocalStorageValue} from "../../helpers/localStorage";
 import gql from "graphql-tag";
 import { useMutation } from "@apollo/react-hooks";
 import {useNavigate} from "react-router-dom";
@@ -19,8 +19,8 @@ export const useRefreshTokenMutation = () => {
     const navigate = useNavigate();
     const [refreshToken] = useMutation(refreshTokenMutationGQL, {
         onCompleted: (data: { login: { accessToken: string, refreshToken: string }}) => {
-            storeData("accessToken", data.login.accessToken);
-            storeData("refreshToken", data.login.refreshToken);
+            setLocalStorageValue("accessToken", data.login.accessToken);
+            setLocalStorageValue("refreshToken", data.login.refreshToken);
         },
         onError: () => navigate(SIGN_IN)
     });

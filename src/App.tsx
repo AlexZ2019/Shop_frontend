@@ -4,11 +4,12 @@ import {MAIN, SIGN_IN} from "./helpers/consts";
 import {SignIn} from "./Components/SignIn/SignIn";
 import {AuthProvider} from "./Auth/AuthProvider";
 import {Route, Routes} from "react-router-dom";
+import {TopBar} from "./Components/TopBar/TopBar";
 
 function App() {
 
     const routes = [
-        {path: MAIN, component: <div>Main</div>},
+        {path: MAIN, component: <div><TopBar/>Main</div>},
         {path: SIGN_IN, component: <SignIn/>},
     ]
 
