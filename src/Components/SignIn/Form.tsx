@@ -1,6 +1,10 @@
 import {Button, Input} from "antd";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
-import {useLoginMutation} from "../../Apollo/mutations/login";
+import {useMutation} from "@apollo/react-hooks";
+import {setLocalStorageValue} from "../../helpers/localStorage";
+import {MAIN} from "../../helpers/consts";
+import {loginMutationGQL} from "../../Auth/graphql/mutations/login";
+import {useNavigate} from "react-router-dom";
 
 type Inputs = {
     email: string,
@@ -9,6 +13,7 @@ type Inputs = {
 
 export const CustomForm = () => {
 
+    const navigate = useNavigate();
     const {handleSubmit, formState: {errors}, control} = useForm({
         defaultValues: {
             email: '',
@@ -16,10 +21,16 @@ export const CustomForm = () => {
         }
     });
 
-    const [login] = useLoginMutation();
+    const [login] = useMutation(loginMutationGQL, {
+        onCompleted: (data: { login: { accessToken: string, refreshToken: string }}) => {
+            setLocalStorageValue("accessToken", data.login.accessToken);
+            setLocalStorageValue("refreshToken", data.login.refreshToken);
+            navigate(MAIN);
+        },
+    });
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
-        await login(data.email, data.password)
+        await login({ variables: data})
      };
 
     return <form onSubmit={handleSubmit(onSubmit)} style={{"width": "300px", margin: "auto", paddingTop: "40vh"}}>
