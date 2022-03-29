@@ -16,7 +16,7 @@ export const CustomForm = () => {
         }
     });
 
-    const [login, loading] = useLoginMutation();
+    const [login] = useLoginMutation();
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         await login(data.email, data.password)
