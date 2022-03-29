@@ -17,7 +17,7 @@ export const useRefreshTokenMutation = () => {
 
 
     const navigate = useNavigate();
-    const [refreshToken, {loading}] = useMutation(refreshTokenMutationGQL, {
+    const [refreshToken] = useMutation(refreshTokenMutationGQL, {
         onCompleted: (data: { login: { accessToken: string, refreshToken: string }}) => {
             storeData("accessToken", data.login.accessToken);
             storeData("refreshToken", data.login.refreshToken);

@@ -8,16 +8,15 @@ import {Route, Routes} from "react-router-dom";
 function App() {
 
     const routes = [
-        {path: MAIN, component: null},
-        {path: SIGN_IN, component: SignIn},
+        {path: MAIN, component: <div>Main</div>},
+        {path: SIGN_IN, component: <SignIn/>},
     ]
 
     return (
         <div className="App">
             <AuthProvider>
                 <Routes>
-                    <Route path={MAIN} element={<div>main</div>}/>
-                    <Route path={SIGN_IN} element={<SignIn/>} />
+                    {routes.map((r, index) => <Route key={index} path={r.path} element={r.component} />)}
                 </Routes>
             </AuthProvider>
         </div>

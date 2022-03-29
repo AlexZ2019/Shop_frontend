@@ -1,6 +1,5 @@
 import gql from "graphql-tag";
 import {useQuery} from "@apollo/client";
-import {useRefreshTokenMutation} from "../mutations/refreshToken";
 
 const userQueryGQL = gql`
     query getUser{

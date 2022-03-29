@@ -4,7 +4,7 @@ import {useRefreshTokenMutation} from "../Apollo/mutations/refreshToken";
 export const AuthProvider = ({children}: any) => {
 
     const [refreshToken] = useRefreshTokenMutation();
-    const {data, loading, error} = useUserQuery({onError: () => refreshToken()});
+    useUserQuery({onError: () => refreshToken()});
 
     return <>{children}</>
 }
