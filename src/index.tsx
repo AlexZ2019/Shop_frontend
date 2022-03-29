@@ -6,14 +6,17 @@ import reportWebVitals from './reportWebVitals';
 import {client} from "./Apollo/config";
 import {ApolloProvider} from "@apollo/client";
 import "antd/dist/antd.css";
+import {BrowserRouter} from "react-router-dom";
 
 ReactDOM.render(
-  <React.StrictMode>
-      <ApolloProvider client={client}>
-          <App />
-      </ApolloProvider>,
-  </React.StrictMode>,
-  document.getElementById('root')
+    <ApolloProvider client={client}>
+        <React.StrictMode>
+            <BrowserRouter>
+                <App/>
+            </BrowserRouter>
+        </React.StrictMode>
+    </ApolloProvider>,
+    document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
