@@ -17,7 +17,7 @@ export const useRefreshTokenMutation = () => {
 
 
     const navigate = useNavigate();
-    const [refreshToken] = useMutation(refreshTokenMutationGQL, {
+    const [refreshToken, {loading}] = useMutation(refreshTokenMutationGQL, {
         onCompleted: (data: { login: { accessToken: string, refreshToken: string }}) => {
             setLocalStorageValue("accessToken", data.login.accessToken);
             setLocalStorageValue("refreshToken", data.login.refreshToken);
@@ -26,6 +26,6 @@ export const useRefreshTokenMutation = () => {
     });
 
 
-    return [refreshToken]
+    return [refreshToken, loading]
 };
 

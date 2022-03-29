@@ -2,7 +2,7 @@ import gql from "graphql-tag";
 import {useQuery} from "@apollo/client";
 
 const userQueryGQL = gql`
-    query getUser{
+    query getUser {
         getUser {
             userId
             email

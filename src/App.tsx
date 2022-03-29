@@ -17,7 +17,8 @@ function App() {
         <div className="App">
             <AuthProvider>
                 <Routes>
-                    {routes.map((r, index) => <Route key={index} path={r.path} element={r.component} />)}
+                    {routes.map((r, index) =>
+                        <Route key={index} path={r.path} element={r.component} />)}
                 </Routes>
             </AuthProvider>
         </div>
