@@ -1,5 +1,5 @@
 import {Button, Form, Input} from "antd";
-import {SubmitHandler, useForm} from "react-hook-form";
+import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {useMutation} from "@apollo/client";
 import {LOGIN} from "../../Apollo/mutations/login";
 import {storeData} from "../../helpers/localStorage";
@@ -11,7 +11,7 @@ type Inputs = {
 
 export const CustomForm = () => {
 
-    const {register, handleSubmit, formState: {errors}} = useForm({
+    const {register, handleSubmit, formState: {errors}, control} = useForm({
         defaultValues: {
             email: '',
             password: ''
@@ -28,13 +28,14 @@ export const CustomForm = () => {
      };
 
     // @ts-ignore
-    return <form onSubmit={handleSubmit(onSubmit)}>
-        <input placeholder="email" {...register("email", {required: true})}/>
+    return <form onSubmit={handleSubmit(onSubmit)} style={{"width": "300px", margin: "auto", paddingTop: "40vh"}}>
+        <Controller name="email" control={control} render={({field}) => <Input placeholder="email" {...field} style={{margin: "15px 0"}} />}/>
         {errors.email && <span>This field is required</span>}
-        <input placeholder="password" type={"password"} {...register("password", {required: true})}/>
+        <Controller name="password" control={control}
+                    render={({field}) => <Input placeholder="password" type={"password"} {...field} width={400} style={{margin: "15px 0"}}/>}/>
         {errors.password && <span>This field is required</span>}
         <Button type="primary" htmlType="submit" loading={loading} >
-            Submit
+            Sign in
         </Button>
     </form>
 }

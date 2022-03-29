@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {client} from "./Apollo/config";
 import {ApolloProvider} from "@apollo/client";
+import "antd/dist/antd.css";
 
 ReactDOM.render(
   <React.StrictMode>
