@@ -1,5 +1,3 @@
-import {LoadingOutlined} from '@ant-design/icons'
-import {Spin} from "antd";
 import {refreshTokenMutationGQL} from "./graphql/mutations/refreshToken";
 import {useQuery} from "@apollo/client";
 import {userQueryGQL} from "./graphql/queries/getUser";
@@ -7,6 +5,7 @@ import {useNavigate} from "react-router-dom";
 import {useMutation} from "@apollo/react-hooks";
 import {setLocalStorageValue} from "../../helpers/localStorage";
 import {SIGN_IN} from "../../helpers/consts";
+import MainSpiner from "../../Components/Spiner/MainSpiner";
 
 const AuthProvider = ({children}: any) => {
     const navigate = useNavigate();
@@ -23,9 +22,8 @@ const AuthProvider = ({children}: any) => {
 
     if (loading) {
         return (
-            <div style={{margin: "auto", padding: "45vh"}}>
-                <Spin indicator={<LoadingOutlined style={{ fontSize: 54 }} spin />} />
-            </div>)
+            <MainSpiner/>
+        )
     }
 
     return <>{children}</>

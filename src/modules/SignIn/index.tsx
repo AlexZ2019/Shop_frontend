@@ -1,5 +1,6 @@
 import * as React from "react";
-import {CustomForm} from "./components/Form";
+import CustomForm from "./components/Form";
+
 
 const SignIn = () => {
 

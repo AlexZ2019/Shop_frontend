@@ -3,9 +3,9 @@ import './App.css';
 import {MAIN, SIGN_IN} from "./helpers/consts";
 
 import {Route, Routes} from "react-router-dom";
-import {TopBar} from "./Components/TopBar/TopBar";
 import AuthProvider from "./modules/Auth";
 import SignIn from "./modules/SignIn";
+import TopBar from "./Components/TopBar";
 
 function App() {
 

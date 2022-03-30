@@ -1,17 +1,18 @@
 import {Button, Input} from "antd";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {useMutation} from "@apollo/react-hooks";
-import {setLocalStorageValue} from "../../../helpers/localStorage";
-import {MAIN} from "../../../helpers/consts";
+import {setLocalStorageValue} from "../../../../helpers/localStorage";
+import {MAIN} from "../../../../helpers/consts";
 import {useNavigate} from "react-router-dom";
-import {loginMutationGQL} from "../../Auth/graphql/mutations/login";
+import {loginMutationGQL} from "../../../Auth/graphql/mutations/login";
+import s from "./index.module.css"
 
 type Inputs = {
     email: string,
     password: string,
 };
 
-export const CustomForm = () => {
+const CustomForm = () => {
 
     const navigate = useNavigate();
     const {handleSubmit, formState: {errors}, control} = useForm({
@@ -33,18 +34,20 @@ export const CustomForm = () => {
         await login({ variables: data})
      };
 
-    return <form onSubmit={handleSubmit(onSubmit)} style={{"width": "300px", margin: "auto", paddingTop: "40vh"}}>
+    return <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
         <Controller name="email" control={control}
                     render={({field}) =>
-                        <Input placeholder="email" {...field} style={{margin: "15px 0"}}/>}/>
+                        <Input placeholder="email" {...field} className={s.input}/>}/>
         {errors.email && <span>This field is required</span>}
         <Controller name="password" control={control}
                     render={({field}) =>
-                        <Input placeholder="password" type={"password"} {...field} width={400}
-                               style={{margin: "15px 0"}}/>}/>
+                        <Input placeholder="password" type={"password"} {...field}
+                               className={s.input}/>}/>
         {errors.password && <span>This field is required</span>}
         <Button type="primary" htmlType="submit">
             Sign in
         </Button>
     </form>
 }
+
+export default CustomForm

@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {client} from "./Apollo/config";
 import {ApolloProvider} from "@apollo/client";
 import "antd/dist/antd.css";
 import {BrowserRouter} from "react-router-dom";
+import client from "./Apollo";
 
 ReactDOM.render(
     <ApolloProvider client={client}>
