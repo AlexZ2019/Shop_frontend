@@ -1,6 +1,6 @@
 import {Layout, Menu} from "antd";
 import {Header} from "antd/es/layout/layout";
-import {useLogout} from "../../Auth/hooks/logout";
+import {useLogout} from "../../modules/Auth/hooks/logout";
 
 export const TopBar = () => {
 

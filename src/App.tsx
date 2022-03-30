@@ -1,10 +1,11 @@
 import React from 'react';
 import './App.css';
 import {MAIN, SIGN_IN} from "./helpers/consts";
-import {SignIn} from "./Components/SignIn/SignIn";
-import {AuthProvider} from "./Auth/AuthProvider";
+
 import {Route, Routes} from "react-router-dom";
 import {TopBar} from "./Components/TopBar/TopBar";
+import AuthProvider from "./modules/Auth";
+import SignIn from "./modules/SignIn";
 
 function App() {
 

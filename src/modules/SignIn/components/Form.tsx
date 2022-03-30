@@ -1,10 +1,10 @@
 import {Button, Input} from "antd";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {useMutation} from "@apollo/react-hooks";
-import {setLocalStorageValue} from "../../helpers/localStorage";
-import {MAIN} from "../../helpers/consts";
-import {loginMutationGQL} from "../../Auth/graphql/mutations/login";
+import {setLocalStorageValue} from "../../../helpers/localStorage";
+import {MAIN} from "../../../helpers/consts";
 import {useNavigate} from "react-router-dom";
+import {loginMutationGQL} from "../../Auth/graphql/mutations/login";
 
 type Inputs = {
     email: string,

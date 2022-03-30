@@ -5,10 +5,10 @@ import {useQuery} from "@apollo/client";
 import {userQueryGQL} from "./graphql/queries/getUser";
 import {useNavigate} from "react-router-dom";
 import {useMutation} from "@apollo/react-hooks";
-import {SIGN_IN} from "../helpers/consts";
-import {setLocalStorageValue} from "../helpers/localStorage";
+import {setLocalStorageValue} from "../../helpers/localStorage";
+import {SIGN_IN} from "../../helpers/consts";
 
-export const AuthProvider = ({children}: any) => {
+const AuthProvider = ({children}: any) => {
     const navigate = useNavigate();
     const [refreshToken] = useMutation(refreshTokenMutationGQL, {
         onCompleted: (data: { login: { accessToken: string, refreshToken: string }}) => {
@@ -30,3 +30,5 @@ export const AuthProvider = ({children}: any) => {
 
     return <>{children}</>
 }
+
+export default AuthProvider

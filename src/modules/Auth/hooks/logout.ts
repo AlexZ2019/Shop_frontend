@@ -1,7 +1,9 @@
 import {useApolloClient} from "@apollo/client";
 import {useNavigate} from "react-router-dom";
-import {removeLocalStorageValue} from "../../helpers/localStorage";
-import {SIGN_IN} from "../../helpers/consts";
+import {removeLocalStorageValue} from "../../../helpers/localStorage";
+import {SIGN_IN} from "../../../helpers/consts";
+
+
 export const useLogout = () => {
 
     const apolloClient = useApolloClient();
