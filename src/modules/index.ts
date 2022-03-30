@@ -1,12 +1,8 @@
-import * as auth from "./auth";
-import * as common from "./common";
-import * as whetherForecast from "./whetherForecast"
-import {mergeArrays} from "../utils/reduceArrays";
+import * as auth from './auth';
+import * as common from './common';
+import * as whetherForecast from './whetherForecast';
+import { mergeArrays } from '../utils/reduceArrays';
 
-let routes = mergeArrays(auth.routes, whetherForecast.routes)
+let routes = mergeArrays(auth.routes, whetherForecast.routes);
 
-export {auth, common, whetherForecast, routes}
-
-
-
-
+export { auth, common, whetherForecast, routes };

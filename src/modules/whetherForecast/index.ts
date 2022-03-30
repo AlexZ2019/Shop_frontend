@@ -1,4 +1,4 @@
-import WhetherForecast from "./pages/WhetherForecast";
-import {routes} from "./routes/routes";
+import WhetherForecast from './pages/WhetherForecast';
+import { routes } from './routes/routes';
 
-export {WhetherForecast, routes}
+export { WhetherForecast, routes };

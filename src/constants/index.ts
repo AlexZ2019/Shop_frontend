@@ -1,6 +1,5 @@
-import routePaths from "./routePaths";
+import routePaths from './routePaths';
 
 export default {
-    ...routePaths
-}
-
+  ...routePaths
+};

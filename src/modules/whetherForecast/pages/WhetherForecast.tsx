@@ -1,11 +1,11 @@
-import {TopBar} from "../../common";
+import { TopBar } from '../../common';
 
 const WhetherForecast = () => {
-    return (
-        <div>
-            <TopBar/>
-        </div>
-    )
-}
+  return (
+    <div>
+      <TopBar />
+    </div>
+  );
+};
 
-export default WhetherForecast
+export default WhetherForecast;

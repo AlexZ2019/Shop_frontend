@@ -3,20 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import {ApolloProvider} from "@apollo/client";
-import "antd/dist/antd.css";
-import {BrowserRouter} from "react-router-dom";
-import client from "./apollo";
+import { ApolloProvider } from '@apollo/client';
+import 'antd/dist/antd.css';
+import { BrowserRouter } from 'react-router-dom';
+import client from './apollo';
 
 ReactDOM.render(
-    <ApolloProvider client={client}>
-        <React.StrictMode>
-            <BrowserRouter>
-                <App/>
-            </BrowserRouter>
-        </React.StrictMode>
-    </ApolloProvider>,
-    document.getElementById('root')
+  <ApolloProvider client={client}>
+    <React.StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </React.StrictMode>
+  </ApolloProvider>,
+  document.getElementById('root')
 );
 
 // If you want to start measuring performance in your app, pass a function
