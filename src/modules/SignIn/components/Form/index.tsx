@@ -4,7 +4,7 @@ import {useMutation} from "@apollo/react-hooks";
 import {setLocalStorageValue} from "../../../../helpers/localStorage";
 import {MAIN} from "../../../../helpers/consts";
 import {useNavigate} from "react-router-dom";
-import {loginMutationGQL} from "../../../Auth/graphql/mutations/login";
+import {loginMutationGQL} from "../../graphql/mutations/login";
 import s from "./index.module.css"
 
 type Inputs = {
