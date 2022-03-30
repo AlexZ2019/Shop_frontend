@@ -6,11 +6,13 @@ import {useMutation} from "@apollo/react-hooks";
 import {setLocalStorageValue} from "../../helpers/localStorage";
 import {SIGN_IN} from "../../helpers/consts";
 import MainSpiner from "../../Components/Spiner/MainSpiner";
+import {OnCompleteData, Props} from "./types/types";
+import {FC} from "react";
 
-const AuthProvider = ({children}: any) => {
+const AuthProvider: FC<Props> = ({children}) => {
     const navigate = useNavigate();
     const [refreshToken] = useMutation(refreshTokenMutationGQL, {
-        onCompleted: (data: { login: { accessToken: string, refreshToken: string }}) => {
+        onCompleted: (data: OnCompleteData) => {
             setLocalStorageValue("accessToken", data.login.accessToken);
             setLocalStorageValue("refreshToken", data.login.refreshToken);
         },
