@@ -8,11 +8,11 @@ const TopBar = () => {
 
   return (
     <Layout>
-      <Header className='header'>
-        <div className='logo' />
-        <Menu theme='dark' mode='horizontal' className={s.menuWrapper}>
-          <Menu.Item key='1'>Whether forecast</Menu.Item>
-          <Menu.Item key='2' onClick={logout}>
+      <Header className="header">
+        <div className="logo" />
+        <Menu theme="dark" mode="horizontal" className={s.menuWrapper}>
+          <Menu.Item key="1">Whether forecast</Menu.Item>
+          <Menu.Item key="2" onClick={logout}>
             Logout
           </Menu.Item>
         </Menu>
