@@ -22,24 +22,29 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+const getRefreshToken = async (refreshToken: string | null) => {
+  const response = await client.mutate({
+    mutation: REFRESH_TOKEN_MUTATION,
+    context: {
+      headers: {
+        authorization: `Bearer ${refreshToken}`
+      }
+    }
+  })
+  setLocalStorageValue("accessToken", response.data.refreshToken.accessToken);
+  setLocalStorageValue("refreshToken", response.data.refreshToken.refreshToken);
+}
+
+const errorLink = onError( ({graphQLErrors, networkError, operation, forward }) => {
   if (graphQLErrors) {
     for (let err of graphQLErrors) {
       switch (err.extensions.code) {
         case 'UNAUTHENTICATED':
-          const headers = operation.getContext().headers;
-          client.mutate({
-            mutation: REFRESH_TOKEN_MUTATION,
-            context: {
-              headers: {
-                authorization: refreshToken ? `Bearer ${refreshToken}` : ''
-              }
-            }
-          }).then(data => {
-            setLocalStorageValue("accessToken", data.data.refreshToken.accessToken);
-            setLocalStorageValue("refreshToken", data.data.refreshToken.refreshToken);
-            debugger
-          });
+          try {
+            getRefreshToken(refreshToken)
+          } catch {
+
+          }
 
           return forward(operation);
 
@@ -61,4 +66,12 @@ client.query({
       authorization: accessToken ? `Bearer ${accessToken}` : ''
     }
   }
-}).then(r => console.log(r));
+})
+  // .then(r => client.writeQuery({query: USER_QUERY,
+  // data: {
+  //   user: {
+  //     userId: r.data.getUser.userId,
+  //     email: r.data.getUser.email
+  //   },
+  // },
+  // }));
