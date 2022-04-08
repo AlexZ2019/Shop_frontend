@@ -12,7 +12,6 @@ const UserProvider = ({ children }: ChildrenProps) => {
         authorization: `Bearer ${accessToken}`
       }
     }});
-  console.log('user', data)
 
   if (loading) {
     return <MainSpiner />;
