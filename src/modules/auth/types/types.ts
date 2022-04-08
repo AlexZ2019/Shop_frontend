@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { Dispatch, ReactNode } from 'react';
 import { Control, FieldError, SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 
 export type OnCompleteData = {
@@ -8,7 +8,7 @@ export type OnCompleteData = {
   };
 };
 
-export type Props = {
+export type ChildrenProps = {
   children: ReactNode;
 };
 
@@ -23,3 +23,18 @@ export type FormProps = {
   control: Control<{ email: string; password: string }>;
   errors: { email?: FieldError | undefined; password?: FieldError | undefined };
 };
+
+export type User = {
+  userId: string
+  email: string
+}
+
+export interface State {
+  user: User | null | false
+}
+
+export interface UserContextInterface extends State {
+  dispatch: Dispatch<any>
+}
+
+

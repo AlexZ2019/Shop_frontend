@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import { UserProvider } from './modules/auth';
 import { routes } from './modules';
+import UserProvider from './providers/UserProvider';
 
 function App() {
   return (

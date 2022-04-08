@@ -1,5 +1,6 @@
 import routePaths from '../../../constants/routePaths';
 import SignIn from '../pages/SignIn';
 import React from 'react';
+import { RouteType } from '../../../interfaces/moduleInterfaces';
 
-export const routes = [{ path: routePaths.signIn, component: <SignIn /> }];
+export const routes = [{ path: routePaths.signIn, component: <SignIn />, type: RouteType.NotAuth }];
