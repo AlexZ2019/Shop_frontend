@@ -7,7 +7,7 @@ import { getLocalStorageValue } from '../../utils/localStorage';
 
 const UserProvider = ({ children }: ChildrenProps) => {
   const accessToken = getLocalStorageValue('accessToken');
-  const { loading, data } = useQuery(USER_QUERY, {context: {
+  const { loading } = useQuery(USER_QUERY, {context: {
       headers: {
         authorization: `Bearer ${accessToken}`
       }

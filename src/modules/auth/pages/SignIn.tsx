@@ -20,11 +20,11 @@ const SignIn = () => {
       password: ''
     }
   });
+
   const [login] = useMutation(loginMutationGQL, {
     onCompleted: (data: { login: { accessToken: string; refreshToken: string } }) => {
       setLocalStorageValue('accessToken', data.login.accessToken);
       setLocalStorageValue('refreshToken', data.login.refreshToken);
-      navigate(routePaths.main);
     }
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {

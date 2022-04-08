@@ -5,5 +5,5 @@ import { IModule } from './common/interfaces/moduleInterfaces';
 
 const routes = mergeArrays(auth.routes, whetherForecast.routes);
 
-const module: IModule = {routes};
+const module: IModule = { routes };
 export default module;

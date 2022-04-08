@@ -3,16 +3,28 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import modules from './modules';
 import UserProvider from './providers/userProvider/UserProvider';
-import { IRoute } from './modules/common/interfaces/moduleInterfaces';
+import { IRoute, RouteType } from './modules/common/interfaces/moduleInterfaces';
+import { PrivetRouteWrapper } from './modules/common/routeWrappers/PrivetRouteWrapper';
+import { NotAuthWrapper } from './modules/common/routeWrappers/NotAuthWrapper';
 
 function App() {
   return (
-    <div className="App">
+    <div className='App'>
       <UserProvider>
         <Routes>
-          {modules.routes.map((r: IRoute, index: number) => (
-            <Route key={index} path={r.path} element={r.component} />
-          ))}
+          {modules.routes.map((r: IRoute, index: number) => {
+            switch (r.type) {
+              case RouteType.Auth:
+                return <Route key={index} path={r.path}
+                              element={<PrivetRouteWrapper >{r.component}</PrivetRouteWrapper>} />;
+              case RouteType.NotAuth:
+                return <Route key={index} path={r.path}
+                              element={<NotAuthWrapper>{r.component}</NotAuthWrapper>} />;
+              default:
+                return <Route key={index} path={r.path}
+                                     element={r.component} />;
+            }
+          })}
         </Routes>
       </UserProvider>
     </div>

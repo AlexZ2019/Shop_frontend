@@ -39,12 +39,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
     for (let err of graphQLErrors) {
       switch (err.extensions.code) {
         case 'UNAUTHENTICATED':
-          try {
-            getAndSaveRefreshToken(refreshToken);
-          } catch {
-            throw new Error('refresh token is expired');
-          }
-
+          getAndSaveRefreshToken(refreshToken);
           return forward(operation);
       }
     }
