@@ -1,4 +1,6 @@
-import WhetherForecast from './pages/WhetherForecast';
+import { IModule } from '../common/interfaces/moduleInterfaces';
 import { routes } from './routes/routes';
 
-export { WhetherForecast, routes };
+
+const module: IModule = {routes};
+export default module;

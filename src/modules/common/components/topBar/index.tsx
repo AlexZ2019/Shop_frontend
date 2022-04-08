@@ -1,7 +1,7 @@
 import { Layout, Menu } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import s from './index.module.css';
-import { useLogout } from '../../../auth';
+import { useLogout } from '../../../auth/hooks/logout';
 
 const TopBar = () => {
   const logout = useLogout();

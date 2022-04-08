@@ -1,8 +1,8 @@
 import { ApolloClient, createHttpLink, from, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { getLocalStorageValue, setLocalStorageValue } from '../utils/localStorage';
+import { getLocalStorageValue, setLocalStorageValue } from '../../utils/localStorage';
 import { onError } from '@apollo/client/link/error';
-import { REFRESH_TOKEN_MUTATION } from '../modules/auth/graphql/mutations/refreshToken';
+import { REFRESH_TOKEN_MUTATION } from '../../modules/auth/graphql/mutations/refreshToken';
 
 const httpLink = createHttpLink({
   uri: 'http://localhost:3001/graphql'

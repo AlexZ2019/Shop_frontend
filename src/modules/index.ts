@@ -1,8 +1,9 @@
-import * as auth from './auth';
-import * as common from './common';
-import * as whetherForecast from './whetherForecast';
 import { mergeArrays } from '../utils/reduceArrays';
+import auth from './auth';
+import whetherForecast from './whetherForecast';
+import { IModule } from './common/interfaces/moduleInterfaces';
 
-let routes = mergeArrays(auth.routes, whetherForecast.routes);
+const routes = mergeArrays(auth.routes, whetherForecast.routes);
 
-export { auth, common, whetherForecast, routes };
+const module: IModule = {routes};
+export default module;
