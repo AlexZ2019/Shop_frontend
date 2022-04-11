@@ -5,17 +5,15 @@ import { PropsType } from './types/types';
 import client from '../../../providers/apollo';
 import { USER_QUERY } from '../../auth/graphql/queries/getUser';
 
-export const PrivetRouteWrapper: FC<PropsType> = ({children}) => {
+export const PrivetRouteWrapper: FC<PropsType> = ({ children }) => {
   const navigate = useNavigate();
   const user = client.readQuery({
     query: USER_QUERY
-  })
-
+  });
   useEffect(() => {
     if (!user) {
       navigate(RoutePaths.signIn);
     }
-  }, []);
-
-  return <>{children}</>
-}
+  }, [user]);
+  return <>{children}</>;
+};

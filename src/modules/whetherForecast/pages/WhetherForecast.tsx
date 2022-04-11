@@ -1,6 +1,7 @@
-import { TopBar } from '../../common';
+import TopBar from '../../common/components/topBar';
 
 const WhetherForecast = () => {
+
   return (
     <div>
       <TopBar />

@@ -2,11 +2,12 @@ import * as React from 'react';
 import CustomForm from '../components/form';
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { loginMutationGQL } from '../graphql/mutations/login';
-import { setLocalStorageValue } from '../../../utils/localStorage';
+import { getLocalStorageValue, setLocalStorageValue } from '../../../utils/localStorage';
 import { Inputs } from '../types/types';
-import routePaths from '../../../constants';
+import { USER_QUERY } from '../graphql/queries/getUser';
+import RoutePaths from '../../../constants/routePaths';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -20,7 +21,13 @@ const SignIn = () => {
       password: ''
     }
   });
-
+  const [fetchUser, { loading }] = useLazyQuery(USER_QUERY, {
+    context: {
+      headers: {
+        authorization: `Bearer ${getLocalStorageValue('accessToken')}`
+      }
+    }
+  });
   const [login] = useMutation(loginMutationGQL, {
     onCompleted: (data: { login: { accessToken: string; refreshToken: string } }) => {
       setLocalStorageValue('accessToken', data.login.accessToken);
@@ -29,6 +36,10 @@ const SignIn = () => {
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await login({ variables: data });
+    if (getLocalStorageValue('accessToken')) {
+      await fetchUser();
+      navigate(RoutePaths.main);
+    }
   };
 
   return (
@@ -38,6 +49,7 @@ const SignIn = () => {
         handleSubmit={handleSubmit}
         control={control}
         errors={errors}
+        loading={loading}
       />
     </div>
   );

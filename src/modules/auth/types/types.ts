@@ -18,10 +18,11 @@ export type Inputs = {
 };
 
 export type FormProps = {
-  onSubmit: SubmitHandler<Inputs>;
-  handleSubmit: UseFormHandleSubmit<{ email: string; password: string }>;
-  control: Control<{ email: string; password: string }>;
-  errors: { email?: FieldError | undefined; password?: FieldError | undefined };
+  onSubmit: SubmitHandler<Inputs>
+  handleSubmit: UseFormHandleSubmit<Inputs>
+  control: Control<Inputs>
+  errors: { email?: FieldError | undefined; password?: FieldError | undefined }
+  loading: boolean
 };
 
 export type User = {

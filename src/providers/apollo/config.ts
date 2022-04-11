@@ -1,5 +1,4 @@
-import { ApolloClient, createHttpLink, from, InMemoryCache } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
+import { ApolloClient, ApolloLink, createHttpLink, from, InMemoryCache } from '@apollo/client';
 import { getLocalStorageValue, setLocalStorageValue } from '../../utils/localStorage';
 import { onError } from '@apollo/client/link/error';
 import { REFRESH_TOKEN_MUTATION } from '../../modules/auth/graphql/mutations/refreshToken';
@@ -10,16 +9,18 @@ const httpLink = createHttpLink({
 
 const accessToken = getLocalStorageValue('accessToken');
 const refreshToken = getLocalStorageValue('refreshToken');
+const authMiddleware = new ApolloLink((operation, forward) => {
+  if (accessToken) {
+    operation.setContext(({ headers = {} }) => ({
+      headers: {
+        ...headers,
+        authorization: `Bearer ${accessToken}`,
+      }
+    }));
+  }
 
-const authLink = setContext((_, { headers }) => {
-
-  return {
-    headers: {
-      ...headers,
-      authorization: accessToken ? `Bearer ${accessToken}` : ''
-    }
-  };
-});
+  return forward(operation);
+})
 
 const getAndSaveRefreshToken = async (refreshToken: string | null) => {
   const response = await client.mutate({
@@ -48,6 +49,6 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
 });
 
 export const client = new ApolloClient({
-  link: from([errorLink, httpLink, authLink]),
+  link: from([authMiddleware, httpLink, errorLink]),
   cache: new InMemoryCache()
 });

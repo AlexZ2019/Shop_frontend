@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ChildrenProps } from '../../modules/auth/types/types';
-import { useQuery } from '@apollo/client';
 import { USER_QUERY } from '../../modules/auth/graphql/queries/getUser';
 import MainSpiner from '../../modules/common/components/mainSpiner';
 import { getLocalStorageValue } from '../../utils/localStorage';
+import { useLazyQuery } from '@apollo/react-hooks';
 
 const UserProvider = ({ children }: ChildrenProps) => {
   const accessToken = getLocalStorageValue('accessToken');
-  const { loading } = useQuery(USER_QUERY, {context: {
+  const [fetchUser, { loading }] = useLazyQuery(USER_QUERY, {
+    context: {
       headers: {
         authorization: `Bearer ${accessToken}`
       }
-    }});
+    }
+  });
+
+  useEffect(() => {
+    if (getLocalStorageValue('accessToken')) {
+      fetchUser();
+    }
+  }, [getLocalStorageValue('accessToken')]);
 
   if (loading) {
     return <MainSpiner />;

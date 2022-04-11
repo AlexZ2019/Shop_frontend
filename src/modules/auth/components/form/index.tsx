@@ -4,7 +4,7 @@ import s from './index.module.css';
 import { FC } from 'react';
 import { FormProps } from '../../types/types';
 
-const CustomForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors }) => {
+const CustomForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors, loading }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
       <Controller
@@ -21,7 +21,7 @@ const CustomForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors }) 
         )}
       />
       {errors.password && <span>This field is required</span>}
-      <Button type="primary" htmlType="submit">
+      <Button type="primary" htmlType="submit" loading={loading}>
         Sign in
       </Button>
     </form>
