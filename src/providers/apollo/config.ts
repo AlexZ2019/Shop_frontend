@@ -1,20 +1,21 @@
 import { ApolloClient, createHttpLink, from, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { getLocalStorageValue, setLocalStorageValue } from '../../utils/localStorage';
+import { getLocalStorageValue, setTokensToLocalStorage } from '../../utils/localStorage';
 import { onError } from '@apollo/client/link/error';
 import { REFRESH_TOKEN_MUTATION } from '../../modules/auth/graphql/mutations/refreshToken';
-import config from '../../constants/config';
+import config from '../../config';
 
 const httpLink = createHttpLink({
-  uri: config.endpoint
+  uri: config.serverApI
 });
 
 const authLink = setContext((_, { headers }) => {
-  if (getLocalStorageValue('accessToken') && getLocalStorageValue('accessToken') !== 'undefined') {
+  const accessToken = getLocalStorageValue('accessToken');
+  if (accessToken) {
     return {
       headers: {
         ...headers,
-        authorization: `Bearer ${getLocalStorageValue('accessToken')}`
+        authorization: `Bearer ${accessToken}`
       }
     };
   }
@@ -25,7 +26,7 @@ export const refreshTokenClient = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-const refreshAndSaveTokens = async (refreshToken: string | null) => {
+const refreshTokens = async (refreshToken: string | null) => {
   try {
     const response = await refreshTokenClient.mutate({
       mutation: REFRESH_TOKEN_MUTATION,
@@ -35,9 +36,8 @@ const refreshAndSaveTokens = async (refreshToken: string | null) => {
         }
       }
     });
-    setLocalStorageValue('accessToken', response.data.refreshToken.accessToken);
-    setLocalStorageValue('refreshToken', response.data.refreshToken.refreshToken);
-    return response;
+
+    return response.data.refreshToken;
   } catch (e) {
     throw e;
   }
@@ -50,20 +50,16 @@ const errorLink = onError(
         for (const { extensions } of graphQLErrors) {
           switch (extensions.code) {
             case 'UNAUTHENTICATED':
-              try {
-                const refreshResponse = await refreshAndSaveTokens(getLocalStorageValue('refreshToken'));
-                operation.setContext({
-                  headers: {
-                    ...operation.getContext().headers,
-                    authorization: `Bearer ${refreshResponse?.data.refreshToken.accessToken}`
-                  }
-                });
+              const tokens = await refreshTokens(getLocalStorageValue('refreshToken'));
+              setTokensToLocalStorage(tokens);
+              operation.setContext({
+                headers: {
+                  ...operation.getContext().headers,
+                  authorization: `Bearer ${tokens.accessToken}`
+                }
+              });
 
-                return forward(operation);
-              }
-              catch (e) {
-                return e;
-              }
+              return forward(operation);
           }
         }
       }

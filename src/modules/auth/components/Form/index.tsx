@@ -2,7 +2,7 @@ import { Button, Input } from 'antd';
 import { Controller } from 'react-hook-form';
 import s from './index.module.css';
 import { FC } from 'react';
-import { FormProps } from '../../types/types';
+import { FormProps } from '../../types';
 
 const CustomForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors, loading }) => {
   return (

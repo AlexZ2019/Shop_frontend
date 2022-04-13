@@ -1,5 +1,5 @@
 import routePaths from './routePaths';
-import config from './config'
+import config from '../config';
 
 export default {
   ...routePaths,

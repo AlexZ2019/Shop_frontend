@@ -9,3 +9,8 @@ export const getLocalStorageValue = (key: string) => {
 export const removeLocalStorageValue = (key: string) => {
   return window.localStorage.removeItem(key);
 };
+
+export const setTokensToLocalStorage = (tokens: {accessToken: string, refreshToken: string }) => {
+  setLocalStorageValue('accessToken', tokens.accessToken);
+  setLocalStorageValue('refreshToken', tokens.refreshToken);
+}

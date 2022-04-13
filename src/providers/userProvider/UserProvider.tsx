@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { ChildrenProps } from '../../modules/auth/types/types';
+import { ChildrenProps } from '../../modules/auth/types';
 import { USER_QUERY } from '../../modules/auth/graphql/queries/getUser';
 import MainSpiner from '../../modules/common/components/mainSpiner';
 import { getLocalStorageValue } from '../../utils/localStorage';
