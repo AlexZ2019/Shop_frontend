@@ -4,6 +4,8 @@ import { getLocalStorageValue, setTokensToLocalStorage } from '../../utils/local
 import { onError } from '@apollo/client/link/error';
 import { REFRESH_TOKEN_MUTATION } from '../../modules/auth/graphql/mutations/refreshToken';
 import config from '../../config';
+import { createBrowserHistory } from 'history'
+import RoutePaths from '../../constants/routePaths';
 
 const httpLink = createHttpLink({
   uri: config.serverApI
@@ -39,6 +41,8 @@ const refreshTokens = async (refreshToken: string | null) => {
 
     return response.data.refreshToken;
   } catch (e) {
+    const history = createBrowserHistory();
+    history.push(RoutePaths.signIn);
     throw e;
   }
 };
