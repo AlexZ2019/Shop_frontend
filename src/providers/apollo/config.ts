@@ -1,54 +1,77 @@
-import { ApolloClient, ApolloLink, createHttpLink, from, InMemoryCache } from '@apollo/client';
+import { ApolloClient, createHttpLink, from, InMemoryCache } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { getLocalStorageValue, setLocalStorageValue } from '../../utils/localStorage';
 import { onError } from '@apollo/client/link/error';
 import { REFRESH_TOKEN_MUTATION } from '../../modules/auth/graphql/mutations/refreshToken';
+import config from '../../constants/config';
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:3001/graphql'
+  uri: config.endpoint
 });
 
-const accessToken = getLocalStorageValue('accessToken');
-const refreshToken = getLocalStorageValue('refreshToken');
-const authMiddleware = new ApolloLink((operation, forward) => {
-  if (accessToken) {
-    operation.setContext(({ headers = {} }) => ({
+const authLink = setContext((_, { headers }) => {
+  if (getLocalStorageValue('accessToken') && getLocalStorageValue('accessToken') !== 'undefined') {
+    return {
       headers: {
         ...headers,
-        authorization: `Bearer ${accessToken}`,
+        authorization: `Bearer ${getLocalStorageValue('accessToken')}`
       }
-    }));
-  }
-
-  return forward(operation);
-})
-
-const getAndSaveRefreshToken = async (refreshToken: string | null) => {
-  const response = await client.mutate({
-    mutation: REFRESH_TOKEN_MUTATION,
-    context: {
-      headers: {
-        authorization: `Bearer ${refreshToken}`
-      }
-    }
-  });
-  setLocalStorageValue('accessToken', response.data.refreshToken.accessToken);
-  setLocalStorageValue('refreshToken', response.data.refreshToken.refreshToken);
-};
-
-const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
-  if (graphQLErrors) {
-    for (let err of graphQLErrors) {
-      switch (err.extensions.code) {
-        case 'UNAUTHENTICATED':
-          getAndSaveRefreshToken(refreshToken);
-          return forward(operation);
-      }
-    }
-    if (networkError) console.log(`[Network error]: ${networkError}`);
+    };
   }
 });
 
-export const client = new ApolloClient({
-  link: from([authMiddleware, httpLink, errorLink]),
+export const refreshTokenClient = new ApolloClient({
+  link: httpLink,
   cache: new InMemoryCache()
 });
+
+const refreshAndSaveTokens = async (refreshToken: string | null) => {
+  try {
+    const response = await refreshTokenClient.mutate({
+      mutation: REFRESH_TOKEN_MUTATION,
+      context: {
+        headers: {
+          authorization: `Bearer ${refreshToken}`
+        }
+      }
+    });
+    setLocalStorageValue('accessToken', response.data.refreshToken.accessToken);
+    setLocalStorageValue('refreshToken', response.data.refreshToken.refreshToken);
+    return response;
+  } catch (e) {
+    throw e;
+  }
+};
+
+const errorLink = onError(
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    (async () => {
+      if (graphQLErrors) {
+        for (const { extensions } of graphQLErrors) {
+          switch (extensions.code) {
+            case 'UNAUTHENTICATED':
+              try {
+                const refreshResponse = await refreshAndSaveTokens(getLocalStorageValue('refreshToken'));
+                operation.setContext({
+                  headers: {
+                    ...operation.getContext().headers,
+                    authorization: `Bearer ${refreshResponse?.data.refreshToken.accessToken}`
+                  }
+                });
+
+                return forward(operation);
+              }
+              catch (e) {
+                return e;
+              }
+          }
+        }
+      }
+    })();
+  });
+
+export const client = new ApolloClient({
+  link: from([errorLink, authLink, httpLink]),
+  cache: new InMemoryCache()
+});
+

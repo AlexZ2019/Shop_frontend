@@ -6,15 +6,17 @@ import reportWebVitals from './reportWebVitals';
 import { ApolloProvider } from '@apollo/client';
 import 'antd/dist/antd.css';
 import { BrowserRouter } from 'react-router-dom';
-import client from './providers/apollo';
+import { client, refreshTokenClient } from './providers/apollo/config';
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <React.StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </React.StrictMode>
+  <ApolloProvider client={refreshTokenClient}>
+    <ApolloProvider client={client}>
+      <React.StrictMode>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </React.StrictMode>
+    </ApolloProvider>
   </ApolloProvider>,
   document.getElementById('root')
 );

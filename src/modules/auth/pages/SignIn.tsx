@@ -21,13 +21,7 @@ const SignIn = () => {
       password: ''
     }
   });
-  const [fetchUser, { loading }] = useLazyQuery(USER_QUERY, {
-    context: {
-      headers: {
-        authorization: `Bearer ${getLocalStorageValue('accessToken')}`
-      }
-    }
-  });
+  const [fetchUser, { loading }] = useLazyQuery(USER_QUERY);
   const [login] = useMutation(loginMutationGQL, {
     onCompleted: (data: { login: { accessToken: string; refreshToken: string } }) => {
       setLocalStorageValue('accessToken', data.login.accessToken);

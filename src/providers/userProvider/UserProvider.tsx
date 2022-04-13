@@ -16,10 +16,12 @@ const UserProvider = ({ children }: ChildrenProps) => {
   });
 
   useEffect(() => {
-    if (getLocalStorageValue('accessToken')) {
-      fetchUser();
-    }
-  }, [getLocalStorageValue('accessToken')]);
+    (async () => {
+      if (accessToken) {
+        await fetchUser();
+      }
+    })();
+  }, [accessToken]);
 
   if (loading) {
     return <MainSpiner />;
