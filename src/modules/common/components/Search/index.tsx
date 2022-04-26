@@ -1,15 +1,15 @@
 import { FC } from 'react';
 import s from './index.module.css';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { Button, Input } from 'antd';
+import Search from 'antd/es/input/Search';
 
 type Props = {
-  onSubmit: SubmitHandler<{search: string}>
+  onSubmit: SubmitHandler<{ search: string }>
   loading: boolean
   placeholder: string
 }
 
-const Search: FC<Props> = ({onSubmit, loading, placeholder}) => {
+const SearchData: FC<Props> = ({ onSubmit, loading, placeholder }) => {
   const {
     handleSubmit,
     formState: { errors },
@@ -26,14 +26,12 @@ const Search: FC<Props> = ({onSubmit, loading, placeholder}) => {
         name='search'
         control={control}
         render={({ field }) => (
-          <Input placeholder={placeholder} size='large' {...field} />
+          <Search placeholder={placeholder} {...field} loading={loading} enterButton
+                  onSearch={(search) => onSubmit({ search })} />
         )}
       />
-      <Button type="primary" htmlType="submit" loading={loading}>
-        Search
-      </Button>
     </form>
   </div>;
 };
 
-export default Search;
+export default SearchData;

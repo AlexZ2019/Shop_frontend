@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { FIND_CITY_QUERY } from '../../graphql/queries/findCity';
 import { SubmitHandler } from 'react-hook-form';
-import Search from '../../../common/components/Search';
+import SearchData from '../../../common/components/Search';
 import SpinnerWrapper from '../../../common/components/SpinnerWrapper';
 import CitySearchResults from '../CitySearchResults';
 
@@ -14,7 +14,7 @@ const CitySearchContainer = () => {
 
   return (
     <Fragment>
-      <Search loading={loading} onSubmit={onSubmit} placeholder="Search city" />
+      <SearchData loading={loading} onSubmit={onSubmit} placeholder="Search city" />
       <SpinnerWrapper loading={loading} data={data && data.findCity || null}
                       Component={CitySearchResults} />
     </Fragment>
