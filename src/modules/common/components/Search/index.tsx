@@ -6,9 +6,10 @@ import { Button, Input } from 'antd';
 type Props = {
   onSubmit: SubmitHandler<{search: string}>
   loading: boolean
+  placeholder: string
 }
 
-const CitySearch: FC<Props> = ({onSubmit, loading}) => {
+const Search: FC<Props> = ({onSubmit, loading, placeholder}) => {
   const {
     handleSubmit,
     formState: { errors },
@@ -25,7 +26,7 @@ const CitySearch: FC<Props> = ({onSubmit, loading}) => {
         name='search'
         control={control}
         render={({ field }) => (
-          <Input placeholder='Search cities' size='large' {...field} />
+          <Input placeholder={placeholder} size='large' {...field} />
         )}
       />
       <Button type="primary" htmlType="submit" loading={loading}>
@@ -35,4 +36,4 @@ const CitySearch: FC<Props> = ({onSubmit, loading}) => {
   </div>;
 };
 
-export default CitySearch;
+export default Search;

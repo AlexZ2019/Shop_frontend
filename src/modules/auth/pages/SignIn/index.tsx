@@ -1,13 +1,13 @@
 import * as React from 'react';
-import SignInForm from '../components/SignInForm';
+import SignInForm from '../../components/SignInForm';
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
-import { LOGIN_MUTATION } from '../graphql/mutations/login';
-import { getLocalStorageValue, setTokensToLocalStorage } from '../../../utils/localStorage';
-import { Inputs } from '../types';
-import { USER_QUERY } from '../graphql/queries/getUser';
-import RoutePaths from '../../../constants/routePaths';
+import { LOGIN_MUTATION } from '../../graphql/mutations/login';
+import { getLocalStorageValue, setTokensToLocalStorage } from '../../../../utils/localStorage';
+import { Inputs } from '../../types';
+import { USER_QUERY } from '../../graphql/queries/getUser';
+import RoutePaths from '../../../../constants/routePaths';
 
 const SignIn = () => {
   const navigate = useNavigate();

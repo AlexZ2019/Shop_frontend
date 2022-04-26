@@ -1,5 +1,5 @@
 import { IModule } from '../common/interfaces/moduleInterfaces';
-import { routes } from './routes/routes';
+import { routes } from './routes';
 
 
 const module: IModule = { routes };
