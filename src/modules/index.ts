@@ -1,6 +1,6 @@
 import { mergeArrays } from '../utils/reduceArrays';
 import auth from './auth';
-import whetherForecast from './whetherForecast';
+import whetherForecast from './weatherForecast';
 import { IModule } from './common/interfaces/moduleInterfaces';
 
 const routes = mergeArrays(auth.routes, whetherForecast.routes);

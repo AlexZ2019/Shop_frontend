@@ -4,8 +4,8 @@ import { Route, Routes } from 'react-router-dom';
 import modules from './modules';
 import UserProvider from './providers/userProvider/UserProvider';
 import { IRoute, RouteType } from './modules/common/interfaces/moduleInterfaces';
-import { PrivetRouteWrapper } from './modules/auth/routeWrappers/PrivetRouteWrapper';
-import { NotAuthWrapper } from './modules/auth/routeWrappers/NotAuthWrapper';
+import { PrivetRouteWrapper } from './modules/auth/components/routeWrappers/PrivetRouteWrapper';
+import { NotAuthWrapper } from './modules/auth/components/routeWrappers/NotAuthWrapper';
 
 function App() {
   return (

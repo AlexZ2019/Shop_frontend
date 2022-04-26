@@ -12,4 +12,4 @@ export interface IRoute {
 
 export interface IModule {
   routes: IRoute[]
-}
+}``

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import CustomForm from '../components/Form';
+import SignInForm from '../components/SignInForm';
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
-import { loginMutationGQL } from '../graphql/mutations/login';
+import { LOGIN_MUTATION } from '../graphql/mutations/login';
 import { getLocalStorageValue, setTokensToLocalStorage } from '../../../utils/localStorage';
 import { Inputs } from '../types';
 import { USER_QUERY } from '../graphql/queries/getUser';
@@ -22,7 +22,7 @@ const SignIn = () => {
     }
   });
   const [fetchUser, { loading }] = useLazyQuery(USER_QUERY);
-  const [login] = useMutation(loginMutationGQL, {
+  const [login] = useMutation(LOGIN_MUTATION, {
     onCompleted: (data: { login: { accessToken: string; refreshToken: string } }) => {
       const tokens = data.login;
       setTokensToLocalStorage(tokens);
@@ -31,21 +31,19 @@ const SignIn = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     await login({ variables: data });
     if (getLocalStorageValue('accessToken')) {
-      await fetchUser();
+      await fetchUser(); // needed to save a user to apollo cache
       navigate(RoutePaths.main);
     }
   };
 
   return (
-    <div>
-      <CustomForm
-        onSubmit={onSubmit}
-        handleSubmit={handleSubmit}
-        control={control}
-        errors={errors}
-        loading={loading}
-      />
-    </div>
+    <SignInForm
+      onSubmit={onSubmit}
+      handleSubmit={handleSubmit}
+      control={control}
+      errors={errors}
+      loading={loading}
+    />
   );
 };
 

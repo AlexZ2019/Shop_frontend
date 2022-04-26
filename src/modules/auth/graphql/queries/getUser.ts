@@ -8,3 +8,5 @@ export const USER_QUERY = gql`
     }
   }
 `;
+
+// TODO: add user module and move all the files for a user
