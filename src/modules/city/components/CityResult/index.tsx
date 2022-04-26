@@ -1,4 +1,4 @@
-import { City } from '../../types';
+import { City } from '../../../weatherForecast/types';
 import { Button, List } from 'antd';
 import { FC } from 'react';
 

@@ -1,4 +1,4 @@
-import { USER_CITIES_ID_QUERY } from '../../graphql/queries/getUserCitiesId';
+import { USER_CITIES_ID_QUERY } from '../../../city/graphql/queries/getUserCitiesId';
 import SpinnerWrapper from '../../../common/components/SpinnerWrapper';
 import WeatherCities from '../WeatherCities';
 import { client } from '../../../../providers/apollo/config';

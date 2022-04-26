@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import { City } from '../../types';
+import { City } from '../../../weatherForecast/types';
 import { List } from 'antd';
 import CityResult from '../CityResult';
 import s from './index.module.css';
