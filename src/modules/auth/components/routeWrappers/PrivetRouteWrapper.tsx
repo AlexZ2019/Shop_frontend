@@ -10,9 +10,14 @@ export const PrivetRouteWrapper: FC<ReactNode> = ({ children }) => {
     query: USER_QUERY
   });
   useEffect(() => {
-    if (!user) { // TODO: return null if !user
+    if (!user) {
       navigate(RoutePaths.signIn);
     }
   }, [user]);
+
+  if (!user) {
+    return null
+  }
+
   return <>{children}</>;
 };

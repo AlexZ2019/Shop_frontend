@@ -11,10 +11,13 @@ export const NotAuthWrapper: FC<ReactNode> = ({ children }) => {
   });
 
   useEffect(() => {
-    if (user) { // TODO: return null if user
+    if (user) {
       navigate(RoutePaths.main);
     }
   }, [user]);
 
+  if (user) {
+    return null;
+  }
   return <>{children}</>;
 };
