@@ -35,7 +35,7 @@ const SignInForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors, lo
         />
         {errors.password && <span>This field is required</span>}
       </div>
-      <Button type="primary" htmlType="submit" loading={loading}>
+      <Button type="primary" htmlType="submit" loading={loading} className={styles.formButton}>
         Sign in
       </Button>
     </form>

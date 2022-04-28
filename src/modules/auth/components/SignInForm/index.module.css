@@ -5,9 +5,20 @@
   background: #ffc34d;
   border-radius: 10px;
 }
+.form button {
+  background-color: coral;
+  border: none;
+}
+.form button:hover {
+  background-color: coral;
+}
 
 .input {
   margin: 15px 0;
+}
+
+.formButton {
+  color: coral;
 }
 
 /*# sourceMappingURL=index.module.css.map */
