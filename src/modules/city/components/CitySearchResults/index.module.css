@@ -1,5 +1,14 @@
 .container {
-  max-width: 35vw;
+  margin: 25px auto;
+}
+
+.select {
+  display: flex;
+  width: 33vw;
+}
+
+.selectButton {
+  width: 7vw;
 }
 
 /*# sourceMappingURL=index.module.css.map */

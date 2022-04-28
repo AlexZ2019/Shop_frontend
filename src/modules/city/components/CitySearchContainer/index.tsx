@@ -5,6 +5,7 @@ import { SubmitHandler } from 'react-hook-form';
 import SearchData from '../../../common/components/Search';
 import SpinnerWrapper from '../../../common/components/SpinnerWrapper';
 import CitySearchResults from '../CitySearchResults';
+import styles from './index.module.css'
 
 const CitySearchContainer = () => {
   const [findCity, { loading, data }] = useLazyQuery(FIND_CITY_QUERY);
@@ -16,7 +17,7 @@ const CitySearchContainer = () => {
     <Fragment>
       <SearchData loading={loading} onSubmit={onSubmit} placeholder="Search city" />
       <SpinnerWrapper loading={loading} data={data && data.findCity || null}
-                      Component={CitySearchResults} />
+                      Component={CitySearchResults} emptyDivClasses={styles.spinnerWrapper}/>
     </Fragment>
   )
 }

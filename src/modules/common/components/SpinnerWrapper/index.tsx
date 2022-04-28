@@ -5,16 +5,17 @@ type Props<D> = {
   Component: FC<D>
   loading: boolean
   data: D
+  emptyDivClasses: any | null
 }
 
-const SpinnerWrapper: FC<Props<any>> = ({ Component, loading, data }) => {
+const SpinnerWrapper: FC<Props<any>> = ({ Component, loading, data, emptyDivClasses = null }) => {
   if (data && !loading) {
     return <Component data={data}/>;
   }
   if (loading) {
     return <MainSpiner />;
   }
-  return null;
+  return <div className={emptyDivClasses} />;
 };
 
 export default SpinnerWrapper;

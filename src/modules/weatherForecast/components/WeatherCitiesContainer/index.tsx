@@ -2,7 +2,7 @@ import { USER_CITIES_ID_QUERY } from '../../../city/graphql/queries/getUserCitie
 import SpinnerWrapper from '../../../common/components/SpinnerWrapper';
 import WeatherCities from '../WeatherCities';
 import { client } from '../../../../providers/apollo/config';
-import { USER_QUERY } from '../../../auth/graphql/queries/getUser';
+import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import { useLazyQuery } from '@apollo/react-hooks';
 import { useEffect } from 'react';
 
@@ -28,7 +28,7 @@ const WeatherCitiesContainer = () => {
   return (
     <div>
       <SpinnerWrapper loading={loading} data={data && data.getUserCitiesId || null}
-                      Component={WeatherCities} />
+                      Component={WeatherCities} emptyDivClasses={null}  />
     </div>
   );
 };

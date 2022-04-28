@@ -1,7 +1,7 @@
 import { FC, ReactNode, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { client } from '../../../../providers/apollo/config';
-import { USER_QUERY } from '../../graphql/queries/getUser';
+import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import RoutePaths from '../../../../constants/routePaths';
 
 export const NotAuthWrapper: FC<ReactNode> = ({ children }) => {

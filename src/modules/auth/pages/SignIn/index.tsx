@@ -6,7 +6,7 @@ import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { LOGIN_MUTATION } from '../../graphql/mutations/login';
 import { getLocalStorageValue, setTokensToLocalStorage } from '../../../../utils/localStorage';
 import { Inputs } from '../../types';
-import { USER_QUERY } from '../../graphql/queries/getUser';
+import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import RoutePaths from '../../../../constants/routePaths';
 
 const SignIn = () => {
