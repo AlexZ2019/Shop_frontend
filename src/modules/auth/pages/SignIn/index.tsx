@@ -8,6 +8,7 @@ import { getLocalStorageValue, setTokensToLocalStorage } from '../../../../utils
 import { Inputs } from '../../types';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import RoutePaths from '../../../../constants/routePaths';
+import styles from './index.module.css';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -37,13 +38,15 @@ const SignIn = () => {
   };
 
   return (
-    <SignInForm
-      onSubmit={onSubmit}
-      handleSubmit={handleSubmit}
-      control={control}
-      errors={errors}
-      loading={loading}
-    />
+    <div className={styles.signInContainer}>
+      <SignInForm
+        onSubmit={onSubmit}
+        handleSubmit={handleSubmit}
+        control={control}
+        errors={errors}
+        loading={loading}
+      />
+    </div>
   );
 };
 

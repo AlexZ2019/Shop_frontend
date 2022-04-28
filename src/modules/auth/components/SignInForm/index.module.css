@@ -1,7 +1,9 @@
 .form {
   width: 300px;
   margin: auto;
-  padding-top: 40vh;
+  padding: 25px;
+  background: #ffc34d;
+  border-radius: 10px;
 }
 
 .input {
