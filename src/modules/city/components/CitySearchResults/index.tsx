@@ -47,7 +47,6 @@ const CitySearchResults: FC<Props> = ({ data }) => {
         });
         await fetchMore({variables: {userId: +user.getUser.userId}})
       }
-
     };
 
     const renderItem = (city: City, key: number) => ({

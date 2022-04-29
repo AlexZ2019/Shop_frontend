@@ -4,8 +4,9 @@ import { getLocalStorageValue, setTokensToLocalStorage } from '../../utils/local
 import { onError } from '@apollo/client/link/error';
 import { REFRESH_TOKEN_MUTATION } from '../../modules/auth/graphql/mutations/refreshToken';
 import config from '../../config';
-import { createBrowserHistory } from 'history'
+import { createBrowserHistory } from 'history';
 import RoutePaths from '../../constants/routePaths';
+import { notification } from 'antd';
 
 const httpLink = createHttpLink({
   uri: config.serverApI
@@ -47,13 +48,20 @@ const refreshTokens = async (refreshToken: string | null) => {
   }
 };
 
+const openNotificationWithIcon = (errorTitle: string, errorDescription: string) => {
+  notification['error']({
+    message: errorTitle,
+    description: errorDescription
+  });
+};
+
 const errorLink = onError(
   ({ graphQLErrors, networkError, operation, forward }) => {
     (async () => {
       if (graphQLErrors) {
-        for (const { extensions } of graphQLErrors) {
-          switch (extensions.code) {
-            case 'UNAUTHENTICATED':
+        for (const { message } of graphQLErrors) {
+          switch (message) {
+            case 'Unauthorized':
               const tokens = await refreshTokens(getLocalStorageValue('refreshToken'));
               setTokensToLocalStorage(tokens);
               operation.setContext({
@@ -64,8 +72,16 @@ const errorLink = onError(
               });
 
               return forward(operation);
+            case 'Invalid Credentials': {
+              openNotificationWithIcon('email or password is incorrect',
+                'Please, enter correct email and password and try again');
+            }
+
           }
         }
+      }
+      if (networkError) {
+        openNotificationWithIcon('Connection is failed', '');
       }
     })();
   });
@@ -81,11 +97,10 @@ export const client = new ApolloClient({
             merge(existing = [], incoming) {
               if (!existing.length) {
                 return incoming;
+              } else {
+                return [...existing, incoming[incoming.length - 1]];
               }
-              else {
-                return [...existing, incoming[incoming.length - 1]]
-              }
-            },
+            }
           }
         }
       }
