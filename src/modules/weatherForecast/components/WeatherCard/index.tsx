@@ -3,6 +3,11 @@ import { FC } from 'react';
 import { CityId } from '../../types';
 import { WEATHER_FORECAST_QUERY } from '../../graphql/queries/getWeatherForecast';
 import { useQuery } from '@apollo/client';
+import { DeleteOutlined } from '@ant-design/icons';
+import { useMutation } from '@apollo/react-hooks';
+import { DELETE_CITY_MUTATION } from '../../../city/graphql/mutations/deleteCity';
+import { USER_QUERY } from '../../../user/graphql/queries/getUser';
+import { client } from '../../../../providers/apollo/config';
 
 type Day = {
   clouds: number
@@ -14,15 +19,23 @@ type Day = {
   windSpeed: number
 }
 
-const WeatherCard: FC<CityId> = ({cityId}) => {
-
-  const {data, loading} = useQuery(WEATHER_FORECAST_QUERY, {
-    variables: {cityId}
+const WeatherCard: FC<CityId> = ({ cityId }) => {
+  const user = client.readQuery({
+    query: USER_QUERY
   })
 
-  return <Card  loading={loading}>
+  const { data, loading } = useQuery(WEATHER_FORECAST_QUERY, {
+    variables: { cityId }
+  });
+
+  const [deleteCity] = useMutation(DELETE_CITY_MUTATION);
+  const deleteCityHandle = async (cityId: string) => {
+    await deleteCity({ variables: {userId: +user.getUser.userId, cityId: +cityId } });
+  };
+
+  return <Card loading={loading}>
     {data && data.getCityWeatherForecast
-    ? <>
+      ? <>
         <h4>City: {data.getCityWeatherForecast.name}</h4>
         <h5>State: {data.getCityWeatherForecast.state}</h5>
         <h5>Country: {data.getCityWeatherForecast.country}</h5>
@@ -33,13 +46,13 @@ const WeatherCard: FC<CityId> = ({cityId}) => {
                 Temperature: day: {day.temp.tempDay} / night: {day.temp.tempNight}
               </div>
               <div>Wind speed: {day.windSpeed} m/s</div>
-            </div>
+            </div>;
           }
         })}
+        <DeleteOutlined onClick={() => deleteCityHandle(cityId)} />
       </>
-    : "Plase, add a city to see weather forecast"}
+      : 'Plase, add a city to see weather forecast'}
+  </Card>;
+};
 
-  </Card>
-}
-
-export default WeatherCard
+export default WeatherCard;

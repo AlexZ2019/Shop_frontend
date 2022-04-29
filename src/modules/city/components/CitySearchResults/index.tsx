@@ -3,7 +3,7 @@ import { City } from '../../../weatherForecast/types';
 import { AutoComplete, Button, Input, Select } from 'antd';
 import styles from './index.module.css';
 import { useMutation } from '@apollo/react-hooks';
-import { ADD_CITY_MUTATION } from '../../graphql/mutation/addCity';
+import { ADD_CITY_MUTATION } from '../../graphql/mutations/addCity';
 import { client } from '../../../../providers/apollo/config';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import { Controller, useForm } from 'react-hook-form';
