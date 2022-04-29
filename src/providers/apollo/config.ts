@@ -72,6 +72,24 @@ const errorLink = onError(
 
 export const client = new ApolloClient({
   link: from([errorLink, authLink, httpLink]),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          getUserCitiesId: {
+            keyArgs: false,
+            merge(existing = [], incoming) {
+              if (!existing.length) {
+                return incoming;
+              }
+              else {
+                return [...existing, incoming[incoming.length - 1]]
+              }
+            },
+          }
+        }
+      }
+    }
+  })
 });
 

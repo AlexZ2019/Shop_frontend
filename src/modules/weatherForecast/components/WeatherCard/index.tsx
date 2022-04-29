@@ -22,7 +22,7 @@ type Day = {
 const WeatherCard: FC<CityId> = ({ cityId }) => {
   const user = client.readQuery({
     query: USER_QUERY
-  })
+  });
 
   const { data, loading } = useQuery(WEATHER_FORECAST_QUERY, {
     variables: { cityId }
@@ -30,7 +30,17 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
 
   const [deleteCity] = useMutation(DELETE_CITY_MUTATION);
   const deleteCityHandle = async (cityId: string) => {
-    await deleteCity({ variables: {userId: +user.getUser.userId, cityId: +cityId } });
+    await deleteCity({
+      variables: { userId: +user.getUser.userId, cityId: +cityId }, update(cache) {
+        cache.modify({
+          fields: {
+            getUserCitiesId(existingCityIdRefs) {
+              return existingCityIdRefs.filter((id: CityId) => id.cityId !== cityId)
+            }
+          }
+        });
+      }
+    });
   };
 
   return <Card loading={loading}>

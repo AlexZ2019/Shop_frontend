@@ -1,17 +1,18 @@
 import { FC } from 'react';
 import { City } from '../../../weatherForecast/types';
-import { AutoComplete, Button, Input, Select } from 'antd';
+import { AutoComplete, Button, Input } from 'antd';
 import styles from './index.module.css';
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_CITY_MUTATION } from '../../graphql/mutations/addCity';
 import { client } from '../../../../providers/apollo/config';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import { Controller, useForm } from 'react-hook-form';
+import { USER_CITIES_ID_QUERY } from '../../graphql/queries/getUserCitiesId';
+import { useQuery } from '@apollo/client';
 
 type Props = {
   data: [City]
 }
-
 
 const CitySearchResults: FC<Props> = ({ data }) => {
     const user = client.readQuery({
@@ -28,6 +29,8 @@ const CitySearchResults: FC<Props> = ({ data }) => {
       }
     });
 
+  const {fetchMore} = useQuery(USER_CITIES_ID_QUERY);
+
     const handleSelector = async (formValues: { selectedValue: string }) => {
 
       if (formValues.selectedValue) {
@@ -42,6 +45,7 @@ const CitySearchResults: FC<Props> = ({ data }) => {
             )[0], userId: +user.getUser.userId
           }
         });
+        await fetchMore({variables: {userId: +user.getUser.userId}})
       }
 
     };
