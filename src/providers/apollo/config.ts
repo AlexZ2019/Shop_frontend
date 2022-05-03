@@ -7,6 +7,7 @@ import config from '../../config';
 import { createBrowserHistory } from 'history';
 import RoutePaths from '../../constants/routePaths';
 import { notification } from 'antd';
+import { openNotificationWithIcon } from '../../utils/showErrorMessage';
 
 const httpLink = createHttpLink({
   uri: config.serverApI
@@ -46,13 +47,6 @@ const refreshTokens = async (refreshToken: string | null) => {
     history.push(RoutePaths.signIn);
     throw e;
   }
-};
-
-const openNotificationWithIcon = (errorTitle: string, errorDescription: string) => {
-  notification['error']({
-    message: errorTitle,
-    description: errorDescription
-  });
 };
 
 const errorLink = onError(

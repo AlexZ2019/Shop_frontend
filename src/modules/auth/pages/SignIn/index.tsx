@@ -9,6 +9,9 @@ import { Inputs } from '../../types';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import RoutePaths from '../../../../constants/routePaths';
 import styles from './index.module.css';
+import * as yup from 'yup';
+import { openNotificationWithIcon } from '../../../../utils/showErrorMessage';
+import { ValidationError } from 'yup';
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -30,10 +33,24 @@ const SignIn = () => {
     }
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await login({ variables: data });
-    if (getLocalStorageValue('accessToken')) {
-      await fetchUser(); // needed to save a user to apollo cache
-      navigate(RoutePaths.main);
+    try {
+      let schema = yup.object().shape({
+        email: yup.string().required().email(),
+        password: yup.string().required().min(3)
+      });
+      await schema.validate({ email: data.email, password: data.password });
+      await login({ variables: data });
+      if (getLocalStorageValue('accessToken')) {
+        await fetchUser(); // needed to save a user to apollo cache
+        navigate(RoutePaths.main);
+      }
+    } catch (error: any) {
+      if (error.name === 'ValidationError') {
+        openNotificationWithIcon(error.toString());
+      }
+      else {
+        throw new Error(error);
+      }
     }
   };
 
