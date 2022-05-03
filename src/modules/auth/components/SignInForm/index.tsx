@@ -35,9 +35,7 @@ const SignInForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors, lo
         <Controller
           name="password"
           control={control}
-          render={({ field }) => (
-            <Input placeholder="password" type={'password'} {...field} />
-          )}
+          render={({ field }) => <Input placeholder="password" type={'password'} {...field} />}
         />
         {errors.password && <span>This field is required</span>}
       </div>

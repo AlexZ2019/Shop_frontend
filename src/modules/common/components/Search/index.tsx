@@ -10,10 +10,7 @@ type Props = {
 };
 
 const SearchData: FC<Props> = ({ onSubmit, loading, placeholder }) => {
-  const {
-    handleSubmit,
-    control
-  } = useForm({
+  const { handleSubmit, control } = useForm({
     defaultValues: {
       search: ''
     }

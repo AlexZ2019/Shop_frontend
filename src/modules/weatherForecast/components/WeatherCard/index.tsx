@@ -46,9 +46,7 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
           }
         });
       },
-      onError() {
-
-      }
+      onError() {}
     });
   };
 
@@ -80,8 +78,12 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
                 {`${data.getCityWeatherForecast.state} 
                 ${data.getCityWeatherForecast.country} `}
                 <DeleteOutlined onClick={showModal} />
-                <Modal title='Do you want to delete the city?' visible={isModalVisible}
-                       onOk={() => handleOk(cityId)} onCancel={handleCancel} />
+                <Modal
+                  title="Do you want to delete the city?"
+                  visible={isModalVisible}
+                  onOk={() => handleOk(cityId)}
+                  onCancel={handleCancel}
+                />
               </>
             }
           />
@@ -101,13 +103,13 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
                         <img
                           className={styles.weatherImg}
                           src={getWeatherIcon(day.weather.main)}
-                          alt='weather image'
+                          alt="weather image"
                         />
                       </div>
                     </div>
                     <div className={styles.temperature}>
                       <div>
-                        <img src={temperature} alt='temperature' />
+                        <img src={temperature} alt="temperature" />
                       </div>
                       <div>
                         <div className={styles.tempDay}>{day.temp.tempDay} ℃</div>
