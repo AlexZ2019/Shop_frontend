@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import MainSpiner from '../mainSpiner';
+import Spiner from '../Spinner';
 
 type Props<D> = {
   Component: FC<D>;
@@ -13,7 +13,7 @@ const SpinnerWrapper: FC<Props<any>> = ({ Component, loading, data, emptyDivClas
     return <Component data={data} />;
   }
   if (loading) {
-    return <MainSpiner />;
+    return <Spiner />;
   }
   return <div className={emptyDivClasses} />;
 };

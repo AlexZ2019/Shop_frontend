@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import s from './index.module.css';
+import styles from './index.module.css';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import Search from 'antd/es/input/Search';
 
@@ -17,8 +17,8 @@ const SearchData: FC<Props> = ({ onSubmit, loading, placeholder }) => {
   });
 
   return (
-    <div className={s.citySearch}>
-      <form onSubmit={handleSubmit(onSubmit)} className={s.form}>
+    <div className={styles.citySearch}>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <Controller
           name="search"
           control={control}
