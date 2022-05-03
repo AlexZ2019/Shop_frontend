@@ -8,26 +8,34 @@ import { useMutation } from '@apollo/react-hooks';
 import { DELETE_CITY_MUTATION } from '../../../city/graphql/mutations/deleteCity';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import { client } from '../../../../providers/apollo/config';
+import Meta from 'antd/es/card/Meta';
+import mainStyles from '../../../index.module.css';
+import styles from './index.module.css'
+import { getWeatherIcon } from '../../utils/getWeatherIcon';
+import temperature from '../../assets/images/temperature.png';
 
 type Day = {
-  clouds: number
   humidity: number
   temp: {
     tempDay: number
     tempNight: number
   }
+  weather: {
+    main: string
+    description: string
+  }
   windSpeed: number
 }
 
 const WeatherCard: FC<CityId> = ({ cityId }) => {
+
+  let now = new Date()
   const user = client.readQuery({
     query: USER_QUERY
   });
-
   const { data, loading } = useQuery(WEATHER_FORECAST_QUERY, {
     variables: { cityId }
   });
-
   const [deleteCity] = useMutation(DELETE_CITY_MUTATION);
   const deleteCityHandle = async (cityId: string) => {
     await deleteCity({
@@ -35,7 +43,7 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
         cache.modify({
           fields: {
             getUserCitiesId(existingCityIdRefs) {
-              return existingCityIdRefs.filter((id: CityId) => id.cityId !== cityId)
+              return existingCityIdRefs.filter((id: CityId) => id.cityId !== cityId);
             }
           }
         });
@@ -43,25 +51,52 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
     });
   };
 
-  return <Card loading={loading}>
+  return <Card loading={loading} className={styles['ant-card']}>
     {data && data.getCityWeatherForecast
       ? <>
-        <h4>City: {data.getCityWeatherForecast.name}</h4>
-        <h5>State: {data.getCityWeatherForecast.state}</h5>
-        <h5>Country: {data.getCityWeatherForecast.country}</h5>
-        {data.getCityWeatherForecast.weatherForecast.map((day: Day, index: number) => {
-          if (index > 0 && index < 4) {
-            return <div>
-              <div>
-                Temperature: day: {day.temp.tempDay} / night: {day.temp.tempNight}
-              </div>
-              <div>Wind speed: {day.windSpeed} m/s</div>
-            </div>;
-          }
-        })}
-        <DeleteOutlined onClick={() => deleteCityHandle(cityId)} />
+        <Meta className={styles.info} description={
+          <>
+            <div>
+              {data.getCityWeatherForecast.name}
+            </div>
+            {`${data.getCityWeatherForecast.state} 
+         ${data.getCityWeatherForecast.country} `}
+            <DeleteOutlined onClick={() => deleteCityHandle(cityId)} />
+          </>}
+        />
+        <div className={`${mainStyles.displayGrid} ${styles.otherDaysCard}`}>
+          {data.getCityWeatherForecast.weatherForecast.map((day: Day, index: number) => {
+            if (index < 4) {
+              let dayDate = now;
+              dayDate.setDate(now.getDate() + index)
+              return <Card className={styles['ant-card']}>
+                <div className={styles.dayInfo}>
+                  {dayDate.toLocaleDateString('en-us', { weekday:"short"})}
+                </div>
+                <div>
+                  <div className={styles.weatherDescription}>
+                    {day.weather.description}
+                  </div>
+                  <div>
+                    <img className={styles.weatherImg} src={getWeatherIcon(day.weather.main)} alt='weather image' />
+                  </div>
+                </div>
+                <div className={styles.temperature}>
+                  <div>
+                    <img src={temperature} alt='temperature' />
+                  </div>
+                  <div>
+                    <div className={styles.tempDay}>{day.temp.tempDay} ℃</div>
+                    <div className={styles.tempNight}>{day.temp.tempNight} ℃</div>
+                  </div>
+
+                </div>
+              </Card>;
+            }
+          })}
+        </div>
       </>
-      : 'Plase, add a city to see weather forecast'}
+      : ''}
   </Card>;
 };
 

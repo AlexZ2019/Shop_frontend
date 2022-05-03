@@ -49,7 +49,7 @@ const CitySearchResults: FC<Props> = ({ data }) => {
       }
     };
 
-    const renderItem = (city: City, key: number) => ({
+    const renderItem = (city: City) => ({
       value: city.name + ', ' + city.state,
       label: (
         <div
@@ -74,8 +74,8 @@ const CitySearchResults: FC<Props> = ({ data }) => {
     const options = [
       {
         label: 'results',
-        options: data.map((city, index) => {
-          return renderItem(city, index);
+        options: data.map((city) => {
+          return renderItem(city);
         })
       }
     ];

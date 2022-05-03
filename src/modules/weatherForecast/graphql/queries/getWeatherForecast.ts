@@ -6,10 +6,13 @@ export const WEATHER_FORECAST_QUERY = gql`
     name
     state
     country
-    weatherForecast{
+    weatherForecast {
     humidity
     windSpeed
-    clouds
+    weather {
+      main
+      description
+    }
     temp {
       tempDay
       tempNight
