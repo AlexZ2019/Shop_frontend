@@ -1,5 +1,5 @@
-import { Card } from 'antd';
-import { FC } from 'react';
+import { Card, Modal } from 'antd';
+import { FC, useState } from 'react';
 import { CityId } from '../../types';
 import { WEATHER_FORECAST_QUERY } from '../../graphql/queries/getWeatherForecast';
 import { useQuery } from '@apollo/client';
@@ -28,13 +28,11 @@ type Day = {
 };
 
 const WeatherCard: FC<CityId> = ({ cityId }) => {
-  let now = new Date();
-  const user = client.readQuery({
-    query: USER_QUERY
-  });
-  const { data, loading } = useQuery(WEATHER_FORECAST_QUERY, {
-    variables: { cityId }
-  });
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
   const [deleteCity] = useMutation(DELETE_CITY_MUTATION);
   const deleteCityHandle = async (cityId: string) => {
     await deleteCity({
@@ -47,9 +45,28 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
             }
           }
         });
+      },
+      onError() {
+
       }
     });
   };
+
+  const handleOk = async (cityId: string) => {
+    setIsModalVisible(false);
+    await deleteCityHandle(cityId);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  let now = new Date();
+  const user = client.readQuery({
+    query: USER_QUERY
+  });
+  const { data, loading } = useQuery(WEATHER_FORECAST_QUERY, {
+    variables: { cityId }
+  });
 
   return (
     <Card loading={loading} className={styles['ant-card']}>
@@ -61,8 +78,10 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
               <>
                 <div>{data.getCityWeatherForecast.name}</div>
                 {`${data.getCityWeatherForecast.state} 
-         ${data.getCityWeatherForecast.country} `}
-                <DeleteOutlined onClick={() => deleteCityHandle(cityId)} />
+                ${data.getCityWeatherForecast.country} `}
+                <DeleteOutlined onClick={showModal} />
+                <Modal title='Do you want to delete the city?' visible={isModalVisible}
+                       onOk={() => handleOk(cityId)} onCancel={handleCancel} />
               </>
             }
           />
@@ -82,13 +101,13 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
                         <img
                           className={styles.weatherImg}
                           src={getWeatherIcon(day.weather.main)}
-                          alt="weather image"
+                          alt='weather image'
                         />
                       </div>
                     </div>
                     <div className={styles.temperature}>
                       <div>
-                        <img src={temperature} alt="temperature" />
+                        <img src={temperature} alt='temperature' />
                       </div>
                       <div>
                         <div className={styles.tempDay}>{day.temp.tempDay} ℃</div>
