@@ -11,7 +11,6 @@ import RoutePaths from '../../../../constants/routePaths';
 import styles from './index.module.css';
 import * as yup from 'yup';
 import { openNotificationWithIcon } from '../../../../utils/showErrorMessage';
-import { ValidationError } from 'yup';
 
 const SignIn = () => {
   const navigate = useNavigate();
