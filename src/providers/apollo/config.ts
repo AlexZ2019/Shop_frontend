@@ -72,11 +72,13 @@ const errorLink = onError(
               });
 
               return forward(operation);
-            case 'Invalid Credentials': {
-              openNotificationWithIcon('email or password is incorrect',
+            case 'Invalid Credentials':
+             return openNotificationWithIcon('email or password is incorrect',
                 'Please, enter correct email and password and try again');
-            }
 
+            case 'This city has already been added':
+              return openNotificationWithIcon('This city has already been added',
+                'You can\'t add the same city twice');
           }
         }
       }
