@@ -75,10 +75,12 @@ const errorLink = onError(
             case 'Invalid Credentials':
              return openNotificationWithIcon('email or password is incorrect',
                 'Please, enter correct email and password and try again');
-
             case 'This city has already been added':
               return openNotificationWithIcon('This city has already been added',
                 'You can\'t add the same city twice');
+            case 'You can\'t add more than 10 cards':
+              return openNotificationWithIcon('You can\'t add more than 10 cards',
+                '');
           }
         }
       }
