@@ -5,16 +5,16 @@ import clear from '../assets/images/clear.png';
 export const getWeatherIcon = (dailyWeatherForecast: string) => {
   switch (dailyWeatherForecast) {
     case 'Clouds': {
-      return clouds
+      return clouds;
     }
     case 'Rain': {
-      return rain
+      return rain;
     }
     case 'Snow': {
-      return rain
+      return rain;
     }
     default: {
-      return clear
+      return clear;
     }
   }
-}
+};

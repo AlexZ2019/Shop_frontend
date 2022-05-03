@@ -10,25 +10,24 @@ const WeatherCitiesContainer = () => {
   const user = client.readQuery({
     query: USER_QUERY
   });
-  const [getUserCitiesId, {
-    data,
-    loading
-  }] = useLazyQuery(USER_CITIES_ID_QUERY);
+  const [getUserCitiesId, { data, loading }] = useLazyQuery(USER_CITIES_ID_QUERY);
 
   useEffect(() => {
     if (user && user.getUser) {
       (async () => {
-          await getUserCitiesId({variables: {userId: +user.getUser.userId}});
-        }
-      )();
+        await getUserCitiesId({ variables: { userId: +user.getUser.userId } });
+      })();
     }
   }, [user]);
 
-
   return (
     <div>
-      <SpinnerWrapper loading={loading} data={data && data.getUserCitiesId || null}
-                      Component={WeatherCities} emptyDivClasses={null}  />
+      <SpinnerWrapper
+        loading={loading}
+        data={(data && data.getUserCitiesId) || null}
+        Component={WeatherCities}
+        emptyDivClasses={null}
+      />
     </div>
   );
 };

@@ -5,11 +5,12 @@ export enum RouteType {
 }
 
 export interface IRoute {
-  component: any
-  path: string
-  type: RouteType
+  component: any;
+  path: string;
+  type: RouteType;
 }
 
 export interface IModule {
-  routes: IRoute[]
-}``
+  routes: IRoute[];
+}
+``;

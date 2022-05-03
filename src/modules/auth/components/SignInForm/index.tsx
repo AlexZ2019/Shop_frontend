@@ -1,15 +1,21 @@
 import { Button, Input } from 'antd';
-import { Control, Controller, FieldError, SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
+import {
+  Control,
+  Controller,
+  FieldError,
+  SubmitHandler,
+  UseFormHandleSubmit
+} from 'react-hook-form';
 import styles from './index.module.css';
 import { FC } from 'react';
 import { Inputs } from '../../types';
 
 type FormProps = {
-  onSubmit: SubmitHandler<Inputs>
-  handleSubmit: UseFormHandleSubmit<Inputs>
-  control: Control<Inputs>
-  errors: { email?: FieldError | undefined; password?: FieldError | undefined }
-  loading: boolean
+  onSubmit: SubmitHandler<Inputs>;
+  handleSubmit: UseFormHandleSubmit<Inputs>;
+  control: Control<Inputs>;
+  errors: { email?: FieldError | undefined; password?: FieldError | undefined };
+  loading: boolean;
 };
 
 const SignInForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors, loading }) => {

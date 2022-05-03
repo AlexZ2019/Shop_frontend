@@ -4,11 +4,6 @@ export type Inputs = {
 };
 
 export type User = {
-  userId: string
-  email: string
-}
-
-
-
-
-
+  userId: string;
+  email: string;
+};

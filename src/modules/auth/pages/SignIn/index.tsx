@@ -46,8 +46,7 @@ const SignIn = () => {
     } catch (error: any) {
       if (error.name === 'ValidationError') {
         openNotificationWithIcon(error.toString());
-      }
-      else {
+      } else {
         throw new Error(error);
       }
     }

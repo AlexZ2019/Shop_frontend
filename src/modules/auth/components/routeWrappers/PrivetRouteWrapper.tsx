@@ -16,7 +16,7 @@ export const PrivetRouteWrapper: FC<ReactNode> = ({ children }) => {
   }, [user]);
 
   if (!user) {
-    return null
+    return null;
   }
 
   return <>{children}</>;

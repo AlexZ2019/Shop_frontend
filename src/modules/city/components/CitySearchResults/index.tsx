@@ -11,96 +11,88 @@ import { USER_CITIES_ID_QUERY } from '../../graphql/queries/getUserCitiesId';
 import { useQuery } from '@apollo/client';
 
 type Props = {
-  data: [City]
-}
+  data: [City];
+};
 
 const CitySearchResults: FC<Props> = ({ data }) => {
-    const user = client.readQuery({
-      query: USER_QUERY
-    });
-    const [addCity, { loading }] = useMutation(ADD_CITY_MUTATION);
+  const user = client.readQuery({
+    query: USER_QUERY
+  });
+  const [addCity, { loading }] = useMutation(ADD_CITY_MUTATION);
 
-    const {
-      handleSubmit,
-      control
-    } = useForm({
-      defaultValues: {
-        selectedValue: ''
-      }
-    });
+  const { handleSubmit, control } = useForm({
+    defaultValues: {
+      selectedValue: ''
+    }
+  });
 
-  const {fetchMore} = useQuery(USER_CITIES_ID_QUERY);
+  const { fetchMore } = useQuery(USER_CITIES_ID_QUERY);
 
-    const handleSelector = async (formValues: { selectedValue: string }) => {
+  const handleSelector = async (formValues: { selectedValue: string }) => {
+    if (formValues.selectedValue) {
+      const valueName = formValues.selectedValue.split(', ');
+      await addCity({
+        variables: {
+          ...data.filter((city) => {
+            if (city.name === valueName[0] && city.state === valueName[1]) {
+              return city;
+            }
+          })[0],
+          userId: +user.getUser.userId
+        }
+      });
+      await fetchMore({ variables: { userId: +user.getUser.userId } });
+    }
+  };
 
-      if (formValues.selectedValue) {
-        const valueName = formValues.selectedValue.split(', ');
-        await addCity({
-          variables: {
-            ...data.filter((city) => {
-                if (city.name === valueName[0] && city.state === valueName[1]) {
-                  return city;
-                }
-              }
-            )[0], userId: +user.getUser.userId
-          }
-        });
-        await fetchMore({variables: {userId: +user.getUser.userId}})
-      }
-    };
+  const renderItem = (city: City) => ({
+    value: city.name + ', ' + city.state,
+    label: (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}
+      >
+        <span>{city.name}</span>
+        <span>{city.state}</span>
+        <span>{city.country}</span>
+      </div>
+    )
+  });
 
-    const renderItem = (city: City) => ({
-      value: city.name + ', ' + city.state,
-      label: (
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between'
-          }}
-        >
-        <span>
-          {city.name}
-      </span>
-          <span>
-          {city.state}
-      </span>
-          <span>
-          {city.country}
-      </span>
-        </div>
-      )
-    });
+  const options = [
+    {
+      label: 'results',
+      options: data.map((city) => {
+        return renderItem(city);
+      })
+    }
+  ];
 
-    const options = [
-      {
-        label: 'results',
-        options: data.map((city) => {
-          return renderItem(city);
-        })
-      }
-    ];
-
-    return (
-      <div className={styles.container}>
-        <form onSubmit={handleSubmit(handleSelector)}>
-          <Controller
-            name='selectedValue'
-            control={control}
-            render={({ field }) => <AutoComplete
+  return (
+    <div className={styles.container}>
+      <form onSubmit={handleSubmit(handleSelector)}>
+        <Controller
+          name="selectedValue"
+          control={control}
+          render={({ field }) => (
+            <AutoComplete
               {...field}
-              dropdownClassName='certain-category-search-dropdown'
+              dropdownClassName="certain-category-search-dropdown"
               dropdownMatchSelectWidth={500}
               className={styles.select}
               options={options}
             >
-              <Input size='large' placeholder='select city' />
-            </AutoComplete>}
-          />
-          <Button size="large" htmlType='submit' loading={loading} className={styles.selectButton}>Add</Button>
-        </form>
-      </div>
-    );
-  }
-;
-
+              <Input size="large" placeholder="select city" />
+            </AutoComplete>
+          )}
+        />
+        <Button size="large" htmlType="submit" loading={loading} className={styles.selectButton}>
+          Add
+        </Button>
+      </form>
+    </div>
+  );
+};
 export default CitySearchResults;

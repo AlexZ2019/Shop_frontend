@@ -6,7 +6,6 @@ import { REFRESH_TOKEN_MUTATION } from '../../modules/auth/graphql/mutations/ref
 import config from '../../config';
 import { createBrowserHistory } from 'history';
 import RoutePaths from '../../constants/routePaths';
-import { notification } from 'antd';
 import { openNotificationWithIcon } from '../../utils/showErrorMessage';
 
 const httpLink = createHttpLink({
@@ -49,40 +48,42 @@ const refreshTokens = async (refreshToken: string | null) => {
   }
 };
 
-const errorLink = onError(
-  ({ graphQLErrors, networkError, operation, forward }) => {
-    (async () => {
-      if (graphQLErrors) {
-        for (const { message } of graphQLErrors) {
-          switch (message) {
-            case 'Unauthorized':
-              const tokens = await refreshTokens(getLocalStorageValue('refreshToken'));
-              setTokensToLocalStorage(tokens);
-              operation.setContext({
-                headers: {
-                  ...operation.getContext().headers,
-                  authorization: `Bearer ${tokens.accessToken}`
-                }
-              });
+const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
+  (async () => {
+    if (graphQLErrors) {
+      for (const { message } of graphQLErrors) {
+        switch (message) {
+          case 'Unauthorized':
+            const tokens = await refreshTokens(getLocalStorageValue('refreshToken'));
+            setTokensToLocalStorage(tokens);
+            operation.setContext({
+              headers: {
+                ...operation.getContext().headers,
+                authorization: `Bearer ${tokens.accessToken}`
+              }
+            });
 
-              return forward(operation);
-            case 'Invalid Credentials':
-             return openNotificationWithIcon('email or password is incorrect',
-                'Please, enter correct email and password and try again');
-            case 'This city has already been added':
-              return openNotificationWithIcon('This city has already been added',
-                'You can\'t add the same city twice');
-            case 'You can\'t add more than 10 cards':
-              return openNotificationWithIcon('You can\'t add more than 10 cards',
-                '');
-          }
+            return forward(operation);
+          case 'Invalid Credentials':
+            return openNotificationWithIcon(
+              'email or password is incorrect',
+              'Please, enter correct email and password and try again'
+            );
+          case 'This city has already been added':
+            return openNotificationWithIcon(
+              'This city has already been added',
+              "You can't add the same city twice"
+            );
+          case "You can't add more than 10 cards":
+            return openNotificationWithIcon("You can't add more than 10 cards", '');
         }
       }
-      if (networkError) {
-        openNotificationWithIcon('Connection is failed', '');
-      }
-    })();
-  });
+    }
+    if (networkError) {
+      openNotificationWithIcon('Connection is failed', '');
+    }
+  })();
+});
 
 export const client = new ApolloClient({
   link: from([errorLink, authLink, httpLink]),
@@ -105,4 +106,3 @@ export const client = new ApolloClient({
     }
   })
 });
-

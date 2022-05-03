@@ -3,7 +3,6 @@ import CitySearchContainer from '../../../city/components/CitySearchContainer';
 import WeatherCitiesContainer from '../../components/WeatherCitiesContainer';
 
 const WeatherForecast = () => {
-
   return (
     <div>
       <TopBar />
