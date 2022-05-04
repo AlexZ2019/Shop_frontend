@@ -42,10 +42,10 @@ const CitySearchResults: FC<Props> = ({ data, onSubmit }) => {
     await addCity({
       variables: {
         ...city,
-        userId: +user.getUser.userId
+        userId: +user.getUser.id
       }
     });
-    await fetchMore({ variables: { userId: +user.getUser.userId } });
+    await fetchMore({ variables: { userId: +user.getUser.id } });
   };
 
   const renderItem = (city: City) => ({

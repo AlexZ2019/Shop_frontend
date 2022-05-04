@@ -12,7 +12,6 @@ import styles from './index.module.css';
 import * as yup from 'yup';
 import { openNotificationWithIcon } from '../../../../utils/showErrorMessage';
 let schema = yup.object().shape({
-
   email: yup.string().required().email(),
   password: yup.string().required().min(3)
 });
