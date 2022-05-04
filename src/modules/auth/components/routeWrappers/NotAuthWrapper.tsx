@@ -6,7 +6,7 @@ import { useQuery } from '@apollo/client';
 
 export const NotAuthWrapper: FC<ReactNode> = ({ children }) => {
   const navigate = useNavigate();
-  const {data} = useQuery(USER_QUERY);
+  const { data } = useQuery(USER_QUERY);
   useEffect(() => {
     if (data) {
       navigate(RoutePaths.main);

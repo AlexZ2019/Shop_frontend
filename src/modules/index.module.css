@@ -2,4 +2,9 @@
   display: grid;
 }
 
+.flexSpaceBetween {
+  display: flex;
+  justify-content: space-between;
+}
+
 /*# sourceMappingURL=index.module.css.map */

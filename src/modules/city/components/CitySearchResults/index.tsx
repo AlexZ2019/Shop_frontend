@@ -2,19 +2,23 @@ import { FC } from 'react';
 import { City } from '../../../weatherForecast/types';
 import { AutoComplete, Button, Input } from 'antd';
 import styles from './index.module.css';
+import mainStyles from '../../../index.module.css';
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_CITY_MUTATION } from '../../graphql/mutations/addCity';
 import { client } from '../../../../providers/apollo/config';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
-import { Controller, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { USER_CITIES_ID_QUERY } from '../../graphql/queries/getUserCitiesId';
 import { useQuery } from '@apollo/client';
+import _ from 'lodash';
+import constants from '../../../../constants';
 
 type Props = {
   data: [City];
+  onSubmit: SubmitHandler<{ search: string }>;
 };
 
-const CitySearchResults: FC<Props> = ({ data }) => {
+const CitySearchResults: FC<Props> = ({ data, onSubmit }) => {
   const user = client.readQuery({
     query: USER_QUERY
   });
@@ -28,35 +32,35 @@ const CitySearchResults: FC<Props> = ({ data }) => {
 
   const { fetchMore } = useQuery(USER_CITIES_ID_QUERY);
 
-  const handleSelector = async (formValues: { selectedValue: string }) => {
+  const handleSearch = async (formValues: { selectedValue: string }) => {
     if (formValues.selectedValue) {
-      const valueName = formValues.selectedValue.split(', ');
-      await addCity({
-        variables: {
-          ...data.filter((city) => {
-            if (city.name === valueName[0] && city.state === valueName[1]) {
-              return city;
-            }
-          })[0],
-          userId: +user.getUser.userId
-        }
-      });
-      await fetchMore({ variables: { userId: +user.getUser.userId } });
+      _.throttle(onSubmit({ search: formValues.selectedValue }), constants.throttlingTime);
     }
   };
 
+  const handleAddCity = async (city: City) => {
+    await addCity({
+      variables: {
+        ...city,
+        userId: +user.getUser.userId
+      }
+    });
+    await fetchMore({ variables: { userId: +user.getUser.userId } });
+  };
+
   const renderItem = (city: City) => ({
-    value: city.name + ', ' + city.state,
     label: (
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between'
-        }}
-      >
-        <span>{city.name}</span>
-        <span>{city.state}</span>
-        <span>{city.country}</span>
+      <div className={mainStyles.flexSpaceBetween}>
+        <div>
+          <span className={styles.cityInfo}>{city.name}</span>
+          <span className={styles.cityInfo}>{city.state}</span>
+          <span>{city.country}</span>
+        </div>
+        <div>
+          <Button onClick={() => handleAddCity(city)} disabled={loading}>
+            Add
+          </Button>
+        </div>
       </div>
     )
   });
@@ -64,15 +68,17 @@ const CitySearchResults: FC<Props> = ({ data }) => {
   const options = [
     {
       label: 'results',
-      options: data.map((city) => {
-        return renderItem(city);
-      })
+      options: data
+        ? data.map((city) => {
+            return renderItem(city);
+          })
+        : []
     }
   ];
 
   return (
     <div className={styles.container}>
-      <form onSubmit={handleSubmit(handleSelector)}>
+      <form>
         <Controller
           name="selectedValue"
           control={control}
@@ -84,13 +90,10 @@ const CitySearchResults: FC<Props> = ({ data }) => {
               className={styles.select}
               options={options}
             >
-              <Input size="large" placeholder="select city" />
+              <Input size="large" placeholder="search city" onChange={handleSubmit(handleSearch)} />
             </AutoComplete>
           )}
         />
-        <Button size="large" htmlType="submit" loading={loading} className={styles.selectButton}>
-          Add
-        </Button>
       </form>
     </div>
   );
