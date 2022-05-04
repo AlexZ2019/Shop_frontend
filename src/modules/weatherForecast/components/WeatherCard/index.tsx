@@ -34,9 +34,9 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
   };
 
   const [deleteCity] = useMutation(DELETE_CITY_MUTATION);
-  const deleteCityHandle = async (cityId: string) => {
+  const handleDeleteCity = async (cityId: string) => {
     await deleteCity({
-      variables: { userId: +user.getUser.userId, cityId: +cityId },
+      variables: { userId: +user.getUser.id, cityId: +cityId },
       update(cache) {
         cache.modify({
           fields: {
@@ -52,7 +52,7 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
 
   const handleOk = async (cityId: string) => {
     setIsModalVisible(false);
-    await deleteCityHandle(cityId);
+    await handleDeleteCity(cityId);
   };
 
   const handleCancel = () => {

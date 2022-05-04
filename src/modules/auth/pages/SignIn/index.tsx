@@ -11,6 +11,11 @@ import RoutePaths from '../../../../constants/routePaths';
 import styles from './index.module.css';
 import * as yup from 'yup';
 import { openNotificationWithIcon } from '../../../../utils/showErrorMessage';
+let schema = yup.object().shape({
+
+  email: yup.string().required().email(),
+  password: yup.string().required().min(3)
+});
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -33,10 +38,6 @@ const SignIn = () => {
   });
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      let schema = yup.object().shape({
-        email: yup.string().required().email(),
-        password: yup.string().required().min(3)
-      });
       await schema.validate({ email: data.email, password: data.password });
       await login({ variables: data });
       if (getLocalStorageValue('accessToken')) {

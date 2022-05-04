@@ -58,12 +58,11 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
             const tokens = await refreshTokens(getLocalStorageValue('refreshToken'));
             setTokensToLocalStorage(tokens);
             operation.setContext({
-                headers: {
-                  ...operation.getContext().headers,
-                  authorization: `Bearer ${tokens.accessToken}`
-                }
+              headers: {
+                ...operation.getContext().headers,
+                authorization: `Bearer ${tokens.accessToken}`
               }
-            );
+            });
             await client.query({
               query: USER_QUERY
             });
@@ -76,10 +75,10 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
           case 'This city has already been added':
             return openNotificationWithIcon(
               'This city has already been added',
-              'You can\'t add the same city twice'
+              "You can't add the same city twice"
             );
-          case 'You can\'t add more than 10 cards':
-            return openNotificationWithIcon('You can\'t add more than 10 cards', '');
+          case "You can't add more than 10 cards":
+            return openNotificationWithIcon("You can't add more than 10 cards", '');
         }
       }
     }

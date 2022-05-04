@@ -15,7 +15,7 @@ const WeatherCitiesContainer = () => {
   useEffect(() => {
     if (user && user.getUser) {
       (async () => {
-        await getUserCitiesId({ variables: { userId: +user.getUser.userId } });
+        await getUserCitiesId({ variables: { userId: +user.getUser.id } });
       })();
     }
   }, [user]);
