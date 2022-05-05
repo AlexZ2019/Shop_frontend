@@ -6,8 +6,9 @@ import { REFRESH_TOKEN_MUTATION } from '../../modules/auth/graphql/mutations/ref
 import config from '../../config';
 import { createBrowserHistory } from 'history';
 import RoutePaths from '../../constants/routePaths';
-import { openNotificationWithIcon } from '../../utils/showErrorMessage';
 import { USER_QUERY } from '../../modules/user/graphql/queries/getUser';
+import { gqlErrors } from './gqlErrors';
+import { notification } from 'antd';
 
 const httpLink = createHttpLink({
   uri: config.serverApI
@@ -50,42 +51,36 @@ const refreshTokens = async (refreshToken: string | null) => {
 };
 
 const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
-  (async () => {
-    if (graphQLErrors) {
-      for (const { message } of graphQLErrors) {
-        switch (message) {
-          case 'Unauthorized':
-            const tokens = await refreshTokens(getLocalStorageValue('refreshToken'));
-            setTokensToLocalStorage(tokens);
-            operation.setContext({
-              headers: {
-                ...operation.getContext().headers,
-                authorization: `Bearer ${tokens.accessToken}`
-              }
-            });
-            await client.query({
-              query: USER_QUERY
-            });
-            return forward(operation);
-          case 'Invalid Credentials':
-            return openNotificationWithIcon(
-              'email or password is incorrect',
-              'Please, enter correct email and password and try again'
-            );
-          case 'This city has already been added':
-            return openNotificationWithIcon(
-              'This city has already been added',
-              "You can't add the same city twice"
-            );
-          case "You can't add more than 10 cards":
-            return openNotificationWithIcon("You can't add more than 10 cards", '');
+  if (graphQLErrors) {
+    graphQLErrors.forEach(async ({ message}) => {
+        if (message === gqlErrors[message].errorTitle) {
+          const tokens = await refreshTokens(getLocalStorageValue('refreshToken'));
+          setTokensToLocalStorage(tokens);
+          operation.setContext({
+            headers: {
+              ...operation.getContext().headers,
+              authorization: `Bearer ${tokens.accessToken}`
+            }
+          });
+          await client.query({
+            query: USER_QUERY
+          });
+          return forward(operation);
         }
+
+        return notification.error({
+          message: gqlErrors[message].errorTitle,
+          description: gqlErrors[message].errorDescription
+        });
       }
-    }
-    if (networkError) {
-      openNotificationWithIcon('Connection is failed', '');
-    }
-  })();
+    );
+  }
+  if (networkError) {
+    return notification.error({
+      message: gqlErrors['Network error'].errorTitle,
+      description: gqlErrors['Network error'].errorDescription
+    });
+  }
 });
 
 export const client = new ApolloClient({
