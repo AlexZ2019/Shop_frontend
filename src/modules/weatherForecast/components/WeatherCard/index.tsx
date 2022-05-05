@@ -93,7 +93,7 @@ const WeatherCard: FC<CityId> = ({ cityId }) => {
                 let dayDate = now;
                 dayDate.setDate(now.getDate() + index);
                 return (
-                  <Card className={styles['ant-card']}>
+                  <Card className={styles['ant-card']} key={index}>
                     <div className={styles.dayInfo}>
                       {dayDate.toLocaleDateString('en-us', { weekday: 'short' })}
                     </div>
