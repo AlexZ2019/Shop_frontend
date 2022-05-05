@@ -21,4 +21,9 @@
   color: coral;
 }
 
+.errorMessage {
+  height: 15px;
+  color: darkred;
+}
+
 /*# sourceMappingURL=index.module.css.map */

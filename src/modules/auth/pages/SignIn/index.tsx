@@ -1,32 +1,31 @@
 import * as React from 'react';
 import SignInForm from '../../components/SignInForm';
 import { useNavigate } from 'react-router-dom';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { LOGIN_MUTATION } from '../../graphql/mutations/login';
 import { getLocalStorageValue, setTokensToLocalStorage } from '../../../../utils/localStorage';
-import { Inputs } from '../../types';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import RoutePaths from '../../../../constants/routePaths';
 import styles from './index.module.css';
 import * as yup from 'yup';
 import { openNotificationWithIcon } from '../../../../utils/showErrorMessage';
-let schema = yup.object().shape({
+import { yupResolver } from '@hookform/resolvers/yup';
+
+const schema = yup.object().shape({
   email: yup.string().required().email(),
   password: yup.string().required().min(3)
-});
+}).required();
 
 const SignIn = () => {
   const navigate = useNavigate();
   const {
     handleSubmit,
     formState: { errors },
-    control
+    control,
   } = useForm({
-    defaultValues: {
-      email: '',
-      password: ''
-    }
+    mode: 'onTouched',
+    resolver: yupResolver(schema),
   });
   const [fetchUser, { loading }] = useLazyQuery(USER_QUERY);
   const [login] = useMutation(LOGIN_MUTATION, {
@@ -35,7 +34,7 @@ const SignIn = () => {
       setTokensToLocalStorage(tokens);
     }
   });
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       await schema.validate({ email: data.email, password: data.password });
       await login({ variables: data });

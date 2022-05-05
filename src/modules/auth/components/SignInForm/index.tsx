@@ -1,19 +1,12 @@
 import { Button, Input } from 'antd';
-import {
-  Control,
-  Controller,
-  FieldError,
-  SubmitHandler,
-  UseFormHandleSubmit
-} from 'react-hook-form';
+import { Control, Controller, FieldError, FieldValues, SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 import styles from './index.module.css';
 import { FC } from 'react';
-import { Inputs } from '../../types';
 
 type FormProps = {
-  onSubmit: SubmitHandler<Inputs>;
-  handleSubmit: UseFormHandleSubmit<Inputs>;
-  control: Control<Inputs>;
+  onSubmit: SubmitHandler<FieldValues>;
+  handleSubmit: UseFormHandleSubmit<FieldValues>;
+  control: Control;
   errors: { email?: FieldError | undefined; password?: FieldError | undefined };
   loading: boolean;
 };
@@ -29,7 +22,7 @@ const SignInForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors, lo
           control={control}
           render={({ field }) => <Input placeholder="email" {...field} />}
         />
-        {errors.email && <span>This field is required</span>}
+        <div className={styles.errorMessage}>{errors.email ? errors.email.message : ''}</div>
       </div>
       <div className={styles.input}>
         <Controller
@@ -37,7 +30,7 @@ const SignInForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors, lo
           control={control}
           render={({ field }) => <Input placeholder="password" type={'password'} {...field} />}
         />
-        {errors.password && <span>This field is required</span>}
+        <div className={styles.errorMessage}>{errors.password ? errors.password.message : ''}</div>
       </div>
       <Button type="primary" htmlType="submit" loading={loading} className={styles.formButton}>
         Sign in
