@@ -21,10 +21,10 @@ const SignIn = () => {
   const {
     handleSubmit,
     formState: { errors },
-    control,
+    control
   } = useForm({
     mode: 'onTouched',
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema)
   });
   const [fetchUser, { loading }] = useLazyQuery(USER_QUERY);
   const [login] = useMutation(LOGIN_MUTATION, {
@@ -34,16 +34,12 @@ const SignIn = () => {
     }
   });
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    try {
-      await login({ variables: data });
-      if (getLocalStorageValue('accessToken')) {
-        await fetchUser(); // needed to save a user to apollo cache
-        navigate(RoutePaths.main);
-      }
-    } catch (error: any) {
-        throw new Error(error);
-      }
-    };
+    await login({ variables: data });
+    if (getLocalStorageValue('accessToken')) {
+      await fetchUser(); // needed to save a user to apollo cache
+      navigate(RoutePaths.main);
+    }
+  };
 
   return (
     <div className={styles.signInContainer}>
