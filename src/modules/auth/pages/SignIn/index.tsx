@@ -9,7 +9,6 @@ import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import RoutePaths from '../../../../constants/routePaths';
 import styles from './index.module.css';
 import * as yup from 'yup';
-import { openNotificationWithIcon } from '../../../../utils/showErrorMessage';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 const schema = yup.object().shape({
@@ -36,20 +35,15 @@ const SignIn = () => {
   });
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      await schema.validate({ email: data.email, password: data.password });
       await login({ variables: data });
       if (getLocalStorageValue('accessToken')) {
         await fetchUser(); // needed to save a user to apollo cache
         navigate(RoutePaths.main);
       }
     } catch (error: any) {
-      if (error.name === 'ValidationError') {
-        openNotificationWithIcon(error.toString());
-      } else {
         throw new Error(error);
       }
-    }
-  };
+    };
 
   return (
     <div className={styles.signInContainer}>
