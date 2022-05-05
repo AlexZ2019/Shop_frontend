@@ -12,6 +12,9 @@
 .form button:hover {
   background-color: coral;
 }
+.form button:focus {
+  background-color: coral;
+}
 
 .input {
   margin: 15px 0;
