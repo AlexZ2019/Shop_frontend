@@ -30,7 +30,11 @@ const CitySearchResults: FC<Props> = ({ data, onSubmit }) => {
     }
   });
 
-  const { fetchMore } = useQuery(USER_CITIES_ID_QUERY);
+  const { fetchMore } = useQuery(USER_CITIES_ID_QUERY, {
+    variables: {
+      userId: user.getUser.id
+    }
+  });
 
   const handleSearch = async (formValues: { selectedValue: string }) => {
     if (formValues.selectedValue) {
@@ -42,10 +46,10 @@ const CitySearchResults: FC<Props> = ({ data, onSubmit }) => {
     await addCity({
       variables: {
         ...city,
-        userId: +user.getUser.id
+        userId: user.getUser.id
       }
     });
-    await fetchMore({ variables: { userId: +user.getUser.id } });
+    await fetchMore({ variables: { userId: user.getUser.id } });
   };
 
   const renderItem = (city: City) => ({

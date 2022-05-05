@@ -8,10 +8,6 @@ export type GqlErrors = {
 }
 
 export const gqlErrors: GqlErrors = {
-  'Unauthorized': {
-    errorTitle: 'Unauthorized',
-    errorDescription: ''
-  },
   'Invalid Credentials': {
     errorTitle: 'email or password is incorrect',
     errorDescription: 'Please, enter correct email and password and try again'
