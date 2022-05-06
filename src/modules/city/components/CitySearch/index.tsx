@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 import { City } from '../../../weather/types';
 import { AutoComplete, Button, Input, notification } from 'antd';
 import styles from './index.module.css';
@@ -16,9 +16,11 @@ import constants from '../../../../constants';
 type Props = {
   data: [City];
   onSubmit: SubmitHandler<{ search: string }>;
+  searchLoading: boolean
 };
 
-const CitySearch: FC<Props> = ({ data, onSubmit }) => {
+const CitySearch: FC<Props> = ({ data, onSubmit, searchLoading }) => {
+  const onSubmitDebounced = useRef(_.debounce(onSubmit, constants.debounceTime));
   const user = client.readQuery({
     query: USER_QUERY
   });
@@ -38,7 +40,7 @@ const CitySearch: FC<Props> = ({ data, onSubmit }) => {
 
   const handleSearch = async (formValues: { selectedValue: string }) => {
     if (formValues.selectedValue) {
-      _.debounce(onSubmit({ search: formValues.selectedValue }), constants.throttlingTime);
+      onSubmitDebounced.current({ search: formValues.selectedValue })
     }
   };
 

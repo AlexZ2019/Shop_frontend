@@ -1,3 +1,3 @@
 export default {
-  throttlingTime: 3000
+  debounceTime: 1000
 };
