@@ -18,7 +18,7 @@ type Props = {
   onSubmit: SubmitHandler<{ search: string }>;
 };
 
-const CitySearchResults: FC<Props> = ({ data, onSubmit }) => {
+const CitySearch: FC<Props> = ({ data, onSubmit }) => {
   const user = client.readQuery({
     query: USER_QUERY
   });
@@ -38,7 +38,7 @@ const CitySearchResults: FC<Props> = ({ data, onSubmit }) => {
 
   const handleSearch = async (formValues: { selectedValue: string }) => {
     if (formValues.selectedValue) {
-      _.throttle(onSubmit({ search: formValues.selectedValue }), constants.throttlingTime);
+      _.debounce(onSubmit({ search: formValues.selectedValue }), constants.throttlingTime);
     }
   };
 
@@ -105,4 +105,4 @@ const CitySearchResults: FC<Props> = ({ data, onSubmit }) => {
     </div>
   );
 };
-export default CitySearchResults;
+export default CitySearch;

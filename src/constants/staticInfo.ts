@@ -1,3 +1,3 @@
 export default {
-  throttlingTime: 2000
+  throttlingTime: 3000
 };
