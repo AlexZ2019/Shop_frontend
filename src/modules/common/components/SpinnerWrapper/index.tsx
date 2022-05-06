@@ -4,18 +4,18 @@ import Spiner from '../Spinner';
 type Props<D> = {
   Component: FC<D>;
   loading: boolean;
-  data: D;
+  componentProps: D;
   emptyDivClasses: any | null;
 };
 
-const SpinnerWrapper: FC<Props<any>> = ({ Component, loading, data, emptyDivClasses = null }) => {
-  if (data && !loading) {
-    return <Component data={data} />;
+const ComponentWrapper: FC<Props<any>> = ({ Component, loading, componentProps, emptyDivClasses = null }) => {
+  if (componentProps && !loading) {
+    return <Component {...componentProps} />;
   }
   if (loading) {
-    return <Spiner />;
+    return <Spiner spinnerType='simple' customStyles='' />;
   }
   return <div className={emptyDivClasses} />;
 };
 
-export default SpinnerWrapper;
+export default ComponentWrapper;

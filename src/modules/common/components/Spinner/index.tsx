@@ -1,11 +1,17 @@
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
-import s from './index.module.css';
+import styles from './index.module.css';
+import { FC } from 'react';
 
-const Spiner = () => {
+type Props = {
+  spinnerType: 'main' | 'simple',
+  customStyles: string
+}
+
+const Spiner: FC<Props> = ({spinnerType, customStyles = ''}) => {
   return (
-    <div className={s.loaderWrapper}>
-      <Spin indicator={<LoadingOutlined className={s.spinner} spin />} />
+    <div className={spinnerType === 'main' ? styles.mainSpinner : customStyles}>
+      <Spin indicator={<LoadingOutlined className={styles.spinner} spin />} />
     </div>
   );
 };

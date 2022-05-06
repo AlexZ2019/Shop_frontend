@@ -1,5 +1,5 @@
 import { CITIES_IDS_QUERY } from '../../../city/graphql/queries/getCitiesIds';
-import SpinnerWrapper from '../../../common/components/SpinnerWrapper';
+import ComponentWrapper from '../../../common/components/SpinnerWrapper';
 import WeatherCities from '../Cities';
 import { client } from '../../../../providers/apollo/config';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
@@ -21,7 +21,7 @@ const WeatherCitiesContainer = () => {
 
   return (
     <div>
-      <SpinnerWrapper
+      <ComponentWrapper
         loading={loading}
         componentProps={data ? {data: data.getCitiesIds} : null}
         Component={WeatherCities}

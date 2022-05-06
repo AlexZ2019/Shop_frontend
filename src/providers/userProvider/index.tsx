@@ -1,8 +1,8 @@
 import React, { FC, ReactNode, useEffect } from 'react';
 import { USER_QUERY } from '../../modules/user/graphql/queries/getUser';
-import MainSpiner from '../../modules/common/components/MainSpiner';
 import { getLocalStorageValue } from '../../utils/localStorage';
 import { useLazyQuery } from '@apollo/react-hooks';
+import Spiner from '../../modules/common/components/Spinner';
 
 const UserProvider: FC<ReactNode> = ({ children }) => {
   const accessToken = getLocalStorageValue('accessToken');
@@ -23,7 +23,7 @@ const UserProvider: FC<ReactNode> = ({ children }) => {
   }, [accessToken]);
 
   if (loading) {
-    return <MainSpiner />;
+    return <Spiner spinnerType='main' customStyles=''/>;
   }
 
   return <>{children}</>;
