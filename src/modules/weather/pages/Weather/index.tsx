@@ -1,4 +1,4 @@
-import TopBar from '../../../common/components/topBar';
+import TopBar from '../../../common/components/TopBar';
 import CitySearchContainer from '../../../city/components/CitySearchContainer';
 import WeatherCitiesContainer from '../../components/CitiesContainer';
 

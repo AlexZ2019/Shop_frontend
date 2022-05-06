@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useEffect } from 'react';
 import { USER_QUERY } from '../../modules/user/graphql/queries/getUser';
-import MainSpiner from '../../modules/common/components/mainSpiner';
+import MainSpiner from '../../modules/common/components/MainSpiner';
 import { getLocalStorageValue } from '../../utils/localStorage';
 import { useLazyQuery } from '@apollo/react-hooks';
 
