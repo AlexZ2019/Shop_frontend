@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
-export const WEATHER_FORECAST_QUERY = gql`
-  query getWeatherForecast($cityId: Float!) {
-    getCityWeatherForecast(cityId: $cityId) {
+export const WEATHER_QUERY = gql`
+  query getWeather($cityId: Float!) {
+    getWeather(cityId: $cityId) {
       name
       state
       country

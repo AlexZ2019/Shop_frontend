@@ -6,6 +6,3 @@ export type City = {
   state: string;
 };
 
-export type CityId = {
-  cityId: string;
-};

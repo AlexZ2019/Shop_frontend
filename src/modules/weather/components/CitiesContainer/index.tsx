@@ -1,6 +1,6 @@
-import { USER_CITIES_ID_QUERY } from '../../../city/graphql/queries/getUserCitiesId';
+import { CITIES_IDS_QUERY } from '../../../city/graphql/queries/getCitiesIds';
 import SpinnerWrapper from '../../../common/components/SpinnerWrapper';
-import WeatherCities from '../WeatherCities';
+import WeatherCities from '../Cities';
 import { client } from '../../../../providers/apollo/config';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import { useLazyQuery } from '@apollo/react-hooks';
@@ -10,12 +10,11 @@ const WeatherCitiesContainer = () => {
   const user = client.readQuery({
     query: USER_QUERY
   });
-  const [getUserCitiesId, { data, loading }] = useLazyQuery(USER_CITIES_ID_QUERY);
-
+  const [getCitiesId, { data, loading }] = useLazyQuery(CITIES_IDS_QUERY);
   useEffect(() => {
-    if (user && user.getUser) {
+    if (user?.getUser) {
       (async () => {
-        await getUserCitiesId({ variables: { userId: user.getUser.id } });
+        await getCitiesId({ variables: { userId: user.getUser.id } });
       })();
     }
   }, [user]);
@@ -24,7 +23,7 @@ const WeatherCitiesContainer = () => {
     <div>
       <SpinnerWrapper
         loading={loading}
-        data={(data && data.getUserCitiesId) || null}
+        componentProps={data ? {data: data.getCitiesIds} : null}
         Component={WeatherCities}
         emptyDivClasses={null}
       />

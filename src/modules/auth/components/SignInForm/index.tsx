@@ -28,11 +28,11 @@ const SignInForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors, lo
         <Controller
           name="password"
           control={control}
-          render={({ field }) => <Input placeholder="password" type={'password'} {...field} />}
+          render={({ field }) => <Input placeholder="password" type="password" {...field} />}
         />
         <div className={styles.errorMessage}>{errors.password ? errors.password.message : ''}</div>
       </div>
-      <Button type="primary" htmlType="submit" loading={loading} className={styles.formButton}>
+      <Button type="primary" htmlType="submit" loading={loading} disabled={loading} className={styles.formButton}>
         Sign in
       </Button>
     </form>

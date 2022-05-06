@@ -1,14 +1,14 @@
 import { FC } from 'react';
-import { City } from '../../../weatherForecast/types';
-import { AutoComplete, Button, Input } from 'antd';
+import { City } from '../../../weather/types';
+import { AutoComplete, Button, Input, notification } from 'antd';
 import styles from './index.module.css';
-import mainStyles from '../../../index.module.css';
+import mainStyles from '../../../common/styles/index.module.css';
 import { useMutation } from '@apollo/react-hooks';
 import { ADD_CITY_MUTATION } from '../../graphql/mutations/addCity';
 import { client } from '../../../../providers/apollo/config';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { USER_CITIES_ID_QUERY } from '../../graphql/queries/getUserCitiesId';
+import { CITIES_IDS_QUERY } from '../../graphql/queries/getCitiesIds';
 import { useQuery } from '@apollo/client';
 import _ from 'lodash';
 import constants from '../../../../constants';
@@ -30,7 +30,7 @@ const CitySearchResults: FC<Props> = ({ data, onSubmit }) => {
     }
   });
 
-  const { fetchMore } = useQuery(USER_CITIES_ID_QUERY, {
+  const { fetchMore } = useQuery(CITIES_IDS_QUERY, {
     variables: {
       userId: user.getUser.id
     }
@@ -50,6 +50,9 @@ const CitySearchResults: FC<Props> = ({ data, onSubmit }) => {
       }
     });
     await fetchMore({ variables: { userId: user.getUser.id } });
+    notification.success({
+      message: 'The city has been added!',
+    });
   };
 
   const renderItem = (city: City) => ({
