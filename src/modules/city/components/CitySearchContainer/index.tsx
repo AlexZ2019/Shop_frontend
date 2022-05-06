@@ -4,14 +4,16 @@ import { SubmitHandler } from 'react-hook-form';
 import CitySearch from '../CitySearch';
 
 const CitySearchContainer = () => {
-  const [findCity, { data, loading }] = useLazyQuery(FIND_CITY_QUERY);
+  const [findCity, { data, loading, error }] = useLazyQuery(FIND_CITY_QUERY);
   const onSubmit: SubmitHandler<{ search: string }> = async (data) => {
-    await findCity({ variables: { city: data.search } });
+    if (data.search.length > 1) {
+      await findCity({ variables: { city: data.search } });
+    }
   };
 
   return (
     <>
-      <CitySearch data={data ? data.findCity : null} searchLoading={loading} onSubmit={onSubmit} />
+      <CitySearch data={data ? data.findCity : null} searchLoading={loading} onSubmit={onSubmit} searchError={error} />
     </>
   );
 };

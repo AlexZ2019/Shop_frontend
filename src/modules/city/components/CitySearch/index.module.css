@@ -4,11 +4,18 @@
 
 .select {
   display: flex;
-  width: 33vw;
+  width: 30vw;
 }
 
 .cityInfo {
   margin-right: 5px;
+}
+
+.spinner {
+  width: 50px;
+  position: relative;
+  left: calc(15vw - 25px);
+  right: calc(15vw - 50px);
 }
 
 /*# sourceMappingURL=index.module.css.map */
