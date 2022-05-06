@@ -4,5 +4,6 @@ export type City = {
   lon: string;
   name: string;
   state: string;
+  isAdded: boolean
 };
 

@@ -1,6 +1,6 @@
 import { FC, useRef, useState } from 'react';
 import { City } from '../../../weather/types';
-import { Alert, AutoComplete, Button, Input, notification } from 'antd';
+import { Alert, AutoComplete, Button, Input, notification, Tag } from 'antd';
 import styles from './index.module.css';
 import mainStyles from '../../../common/styles/index.module.css';
 import { ApolloError, useMutation } from '@apollo/react-hooks';
@@ -71,9 +71,13 @@ const CitySearch: FC<Props> = ({ data, onSubmit, searchLoading, searchError }) =
           <span>{city.country}</span>
         </div>
         <div>
-          <Button onClick={() => handleAddCity(city)} disabled={loading}>
-            Add
-          </Button>
+          {
+            city.isAdded
+              ? <Tag className={styles.tag} color="green">Added</Tag>
+              : <Button size='middle' onClick={() => handleAddCity(city)} disabled={loading}>
+                Add
+              </Button>
+          }
         </div>
       </div>
     )

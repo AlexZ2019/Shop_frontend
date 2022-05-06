@@ -18,4 +18,8 @@
   right: calc(15vw - 50px);
 }
 
+.tag {
+  margin: 0 !important;
+}
+
 /*# sourceMappingURL=index.module.css.map */
