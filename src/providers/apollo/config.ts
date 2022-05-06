@@ -53,7 +53,7 @@ const refreshTokens = async (refreshToken: string | null) => {
 const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach(async ({ message}) => {
-        if (message === gqlErrors[message].errorTitle) {
+        if (message === 'Unauthorized') {
           const tokens = await refreshTokens(getLocalStorageValue('refreshToken'));
           setTokensToLocalStorage(tokens);
           operation.setContext({
