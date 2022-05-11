@@ -8,12 +8,9 @@ export const useLogout = () => {
   const apolloClient = useApolloClient();
   const navigate = useNavigate();
 
-  return async (userId: number) => {
+  return async () => {
     await client.mutate({
       mutation: LOGOUT_MUTATION,
-      variables: {
-        userId
-      }
     })
     await apolloClient.clearStore();
     removeLocalStorageValue('accessToken');
