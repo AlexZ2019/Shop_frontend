@@ -4,8 +4,6 @@ import { WEATHER_QUERY } from '../../graphql/queries/getWeather';
 import { useMutation, useQuery } from '@apollo/client';
 import { DeleteOutlined } from '@ant-design/icons';
 import { DELETE_CITY_MUTATION } from '../../../city/graphql/mutations/deleteCity';
-import { USER_QUERY } from '../../../user/graphql/queries/getUser';
-import { client } from '../../../../providers/apollo/config';
 import Meta from 'antd/es/card/Meta';
 import mainStyles from '../../../common/styles/index.module.css';
 import styles from './index.module.css';
@@ -37,12 +35,12 @@ const WeatherCard: FC<Props> = ({cityId}) => {
   const [deleteCity] = useMutation(DELETE_CITY_MUTATION);
   const handleDeleteCity = async (cityId: string) => {
     await deleteCity({
-      variables: { userId: user.getCurrentUser.id, cityId: cityId },
+      variables: { cityId: cityId },
       update(cache) {
         cache.modify({
           fields: {
             getCitiesIds(existingCityIdRefs) {
-              return existingCityIdRefs.filter((id: {cityId: number}) => id.cityId !== +cityId);
+              return existingCityIdRefs.filter((id: {cityId: number}) => id.cityId !== Number(cityId));
             }
           }
         });
@@ -62,9 +60,6 @@ const WeatherCard: FC<Props> = ({cityId}) => {
     setIsModalVisible(false);
   };
   const currentDate = new Date();
-  const user = client.readQuery({
-    query: USER_QUERY
-  });
   const { data, loading } = useQuery(WEATHER_QUERY, {
     variables: { cityId }
   });

@@ -4,8 +4,6 @@ import { Alert, AutoComplete, Button, Input, notification, Tag } from 'antd';
 import styles from './index.module.css';
 import mainStyles from '../../../common/styles/index.module.css';
 import { ADD_CITY_MUTATION } from '../../graphql/mutations/addCity';
-import { client } from '../../../../providers/apollo/config';
-import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { CITIES_IDS_QUERY } from '../../graphql/queries/getCitiesIds';
 import { ApolloError, useMutation, useQuery } from '@apollo/client';
@@ -26,9 +24,6 @@ const CitySearch: FC<Props> = ({ data, onSubmit, searchLoading, searchError }) =
     setSearchFocus(isFocus);
   }
   const onSubmitDebounced = useRef(_.debounce(onSubmit, constants.debounceTime));
-  const user = client.readQuery({
-    query: USER_QUERY
-  });
   const [addCity, { loading }] = useMutation(ADD_CITY_MUTATION);
   const { handleSubmit, control } = useForm({
     defaultValues: {
@@ -36,11 +31,7 @@ const CitySearch: FC<Props> = ({ data, onSubmit, searchLoading, searchError }) =
     }
   });
 
-  const { fetchMore } = useQuery(CITIES_IDS_QUERY, {
-    variables: {
-      userId: user.getCurrentUser.id
-    }
-  });
+  const { fetchMore } = useQuery(CITIES_IDS_QUERY);
 
   const handleSearch = async (formValues: { selectedValue: string }) => {
     if (formValues.selectedValue) {
@@ -52,10 +43,9 @@ const CitySearch: FC<Props> = ({ data, onSubmit, searchLoading, searchError }) =
     await addCity({
       variables: {
         ...city,
-        userId: user.getCurrentUser.id
       }
     });
-    await fetchMore({ variables: { userId: user.getCurrentUser.id } });
+    await fetchMore({});
     notification.success({
       message: 'The city has been added!',
     });
