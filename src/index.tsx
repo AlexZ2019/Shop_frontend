@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { ApolloProvider } from '@apollo/client';
 import 'antd/dist/antd.css';
 import { BrowserRouter } from 'react-router-dom';
+import { ApolloProvider } from '@apollo/client';
 import { client, refreshTokenClient } from './providers/apollo/config';
 
 ReactDOM.render(

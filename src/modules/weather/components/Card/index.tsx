@@ -1,9 +1,8 @@
 import { Card, Modal, notification } from 'antd';
 import { FC, useState } from 'react';
 import { WEATHER_QUERY } from '../../graphql/queries/getWeather';
-import { useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { DeleteOutlined } from '@ant-design/icons';
-import { useMutation } from '@apollo/react-hooks';
 import { DELETE_CITY_MUTATION } from '../../../city/graphql/mutations/deleteCity';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
 import { client } from '../../../../providers/apollo/config';
@@ -38,12 +37,12 @@ const WeatherCard: FC<Props> = ({cityId}) => {
   const [deleteCity] = useMutation(DELETE_CITY_MUTATION);
   const handleDeleteCity = async (cityId: string) => {
     await deleteCity({
-      variables: { userId: user.getUser.id, cityId: cityId },
+      variables: { userId: user.getCurrentUser.id, cityId: cityId },
       update(cache) {
         cache.modify({
           fields: {
-            getUserCitiesId(existingCityIdRefs) {
-              return existingCityIdRefs.filter((id: string) => id !== cityId);
+            getCitiesIds(existingCityIdRefs) {
+              return existingCityIdRefs.filter((id: {cityId: number}) => id.cityId !== +cityId);
             }
           }
         });
@@ -53,16 +52,10 @@ const WeatherCard: FC<Props> = ({cityId}) => {
 
   const handleOk = async (cityId: string) => {
     setIsModalVisible(false);
-    try {
-      await handleDeleteCity(cityId);
-      notification.success({
-        message: 'The city has been deleted'
-      });
-    } catch {
-      notification.error({
-        message: 'The city hasn\'t been deleted'
-      });
-    }
+    await handleDeleteCity(cityId);
+    notification.success({
+      message: 'The city has been deleted'
+    });
   };
 
   const handleCancel = () => {

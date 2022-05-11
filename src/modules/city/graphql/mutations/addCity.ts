@@ -9,8 +9,6 @@ export const ADD_CITY_MUTATION = gql`
     $country: String!
     $userId: Float!
   ) {
-    addCity(name: $name, lat: $lat, lon: $lon, state: $state, country: $country, userId: $userId) {
-      success
-    }
+    addCity(name: $name, lat: $lat, lon: $lon, state: $state, country: $country, userId: $userId)
   }
 `;

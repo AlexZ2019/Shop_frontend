@@ -3,8 +3,8 @@ import ComponentWrapper from '../../../common/components/SpinnerWrapper';
 import WeatherCities from '../Cities';
 import { client } from '../../../../providers/apollo/config';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
-import { useLazyQuery } from '@apollo/react-hooks';
 import { useEffect } from 'react';
+import { useLazyQuery } from '@apollo/client';
 
 const WeatherCitiesContainer = () => {
   const user = client.readQuery({
@@ -12,9 +12,9 @@ const WeatherCitiesContainer = () => {
   });
   const [getCitiesId, { data, loading }] = useLazyQuery(CITIES_IDS_QUERY);
   useEffect(() => {
-    if (user?.getUser) {
+    if (user?.getCurrentUser) {
       (async () => {
-        await getCitiesId({ variables: { userId: user.getUser.id } });
+        await getCitiesId({ variables: { userId: user.getCurrentUser.id } });
       })();
     }
   }, [user]);

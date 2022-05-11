@@ -2,7 +2,6 @@ import * as React from 'react';
 import SignInForm from '../../components/SignInForm';
 import { useNavigate } from 'react-router-dom';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
-import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { LOGIN_MUTATION } from '../../graphql/mutations/login';
 import { getLocalStorageValue, setTokensToLocalStorage } from '../../../../utils/localStorage';
 import { USER_QUERY } from '../../../user/graphql/queries/getUser';
@@ -10,6 +9,7 @@ import RoutePaths from '../../../../constants/routePaths';
 import styles from './index.module.css';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useLazyQuery, useMutation } from '@apollo/client';
 
 const schema = yup.object().shape({
   email: yup.string().required().email(),

@@ -1,4 +1,4 @@
-import { ApolloClient, createHttpLink, from, InMemoryCache } from '@apollo/client';
+import { ApolloClient, createHttpLink, from, fromPromise, InMemoryCache } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { getLocalStorageValue, setTokensToLocalStorage } from '../../utils/localStorage';
 import { onError } from '@apollo/client/link/error';
@@ -6,7 +6,6 @@ import { REFRESH_TOKEN_MUTATION } from '../../modules/auth/graphql/mutations/ref
 import config from '../../config';
 import { createBrowserHistory } from 'history';
 import RoutePaths from '../../constants/routePaths';
-import { USER_QUERY } from '../../modules/user/graphql/queries/getUser';
 import { gqlErrors } from './gqlErrors';
 import { notification } from 'antd';
 
@@ -31,8 +30,9 @@ export const refreshTokenClient = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-const refreshTokens = async (refreshToken: string | null) => {
+const refreshTokens = async () => {
   try {
+    const refreshToken = getLocalStorageValue('refreshToken');
     const response = await refreshTokenClient.mutate({
       mutation: REFRESH_TOKEN_MUTATION,
       context: {
@@ -41,7 +41,7 @@ const refreshTokens = async (refreshToken: string | null) => {
         }
       }
     });
-
+    setTokensToLocalStorage(response.data.refreshToken);
     return response.data.refreshToken;
   } catch (e) {
     const history = createBrowserHistory();
@@ -49,31 +49,64 @@ const refreshTokens = async (refreshToken: string | null) => {
     throw e;
   }
 };
+let isRefreshing = false;
+let pendingRequests: Function[] = [];
+
+const setIsRefreshing = (value: boolean) => {
+  isRefreshing = value;
+};
+
+const addPendingRequest = (pendingRequest: Function) => {
+  pendingRequests.push(pendingRequest);
+};
+
+const resolvePendingRequests = () => {
+  pendingRequests.map((callback) => callback());
+  pendingRequests = [];
+};
 
 const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
   if (graphQLErrors) {
-    graphQLErrors.forEach(async ({ message}) => {
-        if (message === 'Unauthorized') {
-          const tokens = await refreshTokens(getLocalStorageValue('refreshToken'));
-          setTokensToLocalStorage(tokens);
-          operation.setContext({
-            headers: {
-              ...operation.getContext().headers,
-              authorization: `Bearer ${tokens.accessToken}`
-            }
-          });
-          await client.query({
-            query: USER_QUERY
-          });
-          return forward(operation);
+    for (const error of graphQLErrors) {
+      if (error.message === 'Unauthorized') {
+        let forward$;
+        if (!isRefreshing) {
+          setIsRefreshing(true);
+          forward$ = fromPromise(
+            refreshTokens().then((tokens) => {
+              const oldHeaders = operation.getContext().headers;
+              operation.setContext({
+                headers: {
+                  ...oldHeaders,
+                  authorization: `Bearer ${tokens.accessToken}`
+                }
+              });
+              resolvePendingRequests();
+            }).catch(() => {
+              pendingRequests = [];
+              return;
+            }).finally(() => {
+              setIsRefreshing(false);
+            })
+          );
+        } else {
+          forward$ = fromPromise(
+            new Promise<void>((resolve) => {
+              addPendingRequest(() => resolve());
+            })
+          );
         }
-
-        return notification.error({
-          message: gqlErrors[message].errorTitle,
-          description: gqlErrors[message].errorDescription
+        forward$.flatMap(() => {
+          return forward(operation);
         });
       }
-    );
+      else {
+        notification.error({
+          message: gqlErrors[error.message].errorTitle,
+          description: gqlErrors[error.message].errorDescription
+        });
+      }
+    }
   }
   if (networkError) {
     return notification.error({
@@ -89,7 +122,7 @@ export const client = new ApolloClient({
     typePolicies: {
       Query: {
         fields: {
-          getUserCitiesId: {
+          getCitiesIds: {
             keyArgs: false,
             merge(existing = [], incoming) {
               if (!existing.length) {

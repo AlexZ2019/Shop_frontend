@@ -8,8 +8,8 @@ type Props = {
 const WeatherCities: FC<Props> = ({ data }) => {
   return (
     <div>
-      {data.map((cityId: {cityId: string}, index) => {
-        return <WeatherCard cityId={cityId.cityId} key={index} />;
+      {data.map((city: {cityId: string}, index) => {
+        return <WeatherCard cityId={city.cityId} key={index} />;
       })}
     </div>
   );

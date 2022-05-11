@@ -1,8 +1,8 @@
 import React, { FC, ReactNode, useEffect } from 'react';
 import { USER_QUERY } from '../../modules/user/graphql/queries/getUser';
 import { getLocalStorageValue } from '../../utils/localStorage';
-import { useLazyQuery } from '@apollo/react-hooks';
 import Spiner from '../../modules/common/components/Spinner';
+import { useLazyQuery } from '@apollo/client';
 
 const UserProvider: FC<ReactNode> = ({ children }) => {
   const accessToken = getLocalStorageValue('accessToken');
