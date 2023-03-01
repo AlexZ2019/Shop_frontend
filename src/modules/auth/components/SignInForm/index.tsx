@@ -14,8 +14,7 @@ type FormProps = {
 const SignInForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors, loading }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      <h1>Weather Forecast</h1>
-      <h3>Sign In</h3>
+      <h3>Login</h3>
       <div className={styles.input}>
         <Controller
           name="email"

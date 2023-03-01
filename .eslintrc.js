@@ -21,6 +21,13 @@ module.exports = {
   plugins: ['react', '@typescript-eslint'],
   rules: {
     'prettier/prettier': 'off',
+    'no-debugger': 'off',
+    'no-unused-vars': 'off',
+    'no-restricted-syntax': 'off',
+    'no-loop-func': 'off',
+    'no-useless-return': 'off',
+    'default-param-last': 'off',
+    'no-else-return': 'off',
     'react/jsx-props-no-spreading': 'off',
     'no-shadow': 'off',
     'no-use-before-define': 'off',
