@@ -1,4 +1,5 @@
 export default {
   main: '/',
-  signIn: 'signin'
+  signIn: 'signin',
+  register: 'register'
 };

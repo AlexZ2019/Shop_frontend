@@ -1,5 +1,5 @@
 import * as React from 'react';
-import SignInForm from '../../components/SignInForm';
+import UserForm from '../../components/UserForm';
 import { useNavigate } from 'react-router-dom';
 import { FieldValues, SubmitHandler, useForm } from 'react-hook-form';
 import { LOGIN_MUTATION } from '../../graphql/mutations/login';
@@ -41,14 +41,20 @@ const SignIn = () => {
     }
   };
 
+  const goToRegistration = () => {
+    navigate(`../${RoutePaths.register}`, { replace: true });
+  }
+
   return (
     <div className={styles.signInContainer}>
-      <SignInForm
+      <UserForm
         onSubmit={onSubmit}
         handleSubmit={handleSubmit}
         control={control}
         errors={errors}
         loading={loading}
+        formProps={{ title: 'Login', submitButtonText: 'Login', redirectButtonText: 'Register',
+          redirect: goToRegistration }}
       />
     </div>
   );

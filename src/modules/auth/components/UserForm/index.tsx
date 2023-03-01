@@ -1,20 +1,29 @@
 import { Button, Input } from 'antd';
 import { Control, Controller, FieldError, FieldValues, SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 import styles from './index.module.css';
-import { FC } from 'react';
+import { FC, ReactNode } from 'react';
 
 type FormProps = {
+  title: string;
+  submitButtonText: string;
+  redirectButtonText: string;
+  redirect: () => void;
+  extraFields?: { name: string, component: any }[];
+}
+
+type UserFormProps = {
   onSubmit: SubmitHandler<FieldValues>;
   handleSubmit: UseFormHandleSubmit<FieldValues>;
   control: Control;
   errors: { email?: FieldError | undefined; password?: FieldError | undefined };
   loading: boolean;
+  formProps: FormProps;
 };
 
-const SignInForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors, loading }) => {
+const UserForm: FC<UserFormProps> = ({ onSubmit, handleSubmit, control, errors, loading, formProps }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      <h3>Login</h3>
+      <h3>{ formProps.title }</h3>
       <div className={styles.input}>
         <Controller
           name="email"
@@ -31,11 +40,22 @@ const SignInForm: FC<FormProps> = ({ onSubmit, handleSubmit, control, errors, lo
         />
         <div className={styles.errorMessage}>{errors.password ? errors.password.message : ''}</div>
       </div>
+      { formProps.extraFields &&
+        formProps.extraFields.map((extraField, index) => {
+        return (
+          <div className={styles.input}>
+            <Controller key={index} name={extraField.name} control={control} render={extraField.component}/>
+        </div>
+        );
+      })}
+      <Button type="link" onClick={formProps.redirect} htmlType="submit" disabled={loading} className={styles.formButton}>
+        { formProps.redirectButtonText }
+      </Button>
       <Button type="primary" htmlType="submit" loading={loading} disabled={loading} className={styles.formButton}>
-        Sign in
+        { formProps.submitButtonText }
       </Button>
     </form>
   );
 };
 
-export default SignInForm;
+export default UserForm;

@@ -27,6 +27,7 @@ module.exports = {
     'no-loop-func': 'off',
     'no-useless-return': 'off',
     'default-param-last': 'off',
+    'react/jsx-key': 'off',
     'no-else-return': 'off',
     'react/jsx-props-no-spreading': 'off',
     'no-shadow': 'off',
