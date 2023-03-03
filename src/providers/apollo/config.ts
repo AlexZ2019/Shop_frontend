@@ -1,121 +1,100 @@
-import { ApolloClient, createHttpLink, from, fromPromise, InMemoryCache } from '@apollo/client';
-import { setContext } from '@apollo/client/link/context';
-import { getLocalStorageValue, setTokensToLocalStorage } from '../../utils/localStorage';
+import {
+  ApolloClient,
+  createHttpLink,
+  from, fromPromise,
+  GraphQLRequest,
+  InMemoryCache,
+} from '@apollo/client';
+import {
+  getLocalStorageValue,
+  removeLocalStorageValue,
+  setLocalStorageValue,
+} from '../../utils/localStorage';
 import { onError } from '@apollo/client/link/error';
 import { REFRESH_TOKEN_MUTATION } from '../../modules/auth/graphql/mutations/refreshToken';
 import config from '../../config';
-import { createBrowserHistory } from 'history';
-import RoutePaths from '../../constants/routePaths';
 import { gqlErrors } from './gqlErrors';
 import { notification } from 'antd';
+import { setContext } from "@apollo/client/link/context";
 
 const httpLink = createHttpLink({
   uri: config.serverApI
 });
 
-const authLink = setContext((_, { headers }) => {
-  const accessToken = getLocalStorageValue('accessToken');
-  if (accessToken) {
-    return {
-      headers: {
-        ...headers,
-        authorization: `Bearer ${accessToken}`
-      }
-    };
+const isRefreshRequest = (operation: GraphQLRequest) => operation.operationName ===
+  'RefreshToken';
+
+const returnTokenDependingOnOperation = (operation: GraphQLRequest) => {
+  if (isRefreshRequest(operation)) {
+    return getLocalStorageValue('refreshToken') || '';
+  } else {
+    return getLocalStorageValue('accessToken') || '';
   }
-});
+};
 
-export const refreshTokenClient = new ApolloClient({
-  link: httpLink,
-  cache: new InMemoryCache()
-});
-
-const refreshTokens = async () => {
+const refreshToken = async () => {
   try {
-    const refreshToken = getLocalStorageValue('refreshToken');
-    const response = await refreshTokenClient.mutate({
+    const refreshResolverResponse = await client.mutate({
       mutation: REFRESH_TOKEN_MUTATION,
-      context: {
-        headers: {
-          authorization: `Bearer ${refreshToken}`
-        }
-      }
     });
-    setTokensToLocalStorage(response.data.refreshToken);
-    return response.data.refreshToken;
-  } catch (e) {
-    const history = createBrowserHistory();
-    history.push(RoutePaths.signIn);
-    throw e;
+
+    const accessToken = refreshResolverResponse.data?.refreshToken.accessToken;
+    await setLocalStorageValue('accessToken',
+      refreshResolverResponse.data?.refreshToken.accessToken);
+    await setLocalStorageValue('refreshToken',
+      refreshResolverResponse.data?.refreshToken.refreshToken);
+    return accessToken;
+  } catch (err) {
+    await removeLocalStorageValue('accessToken');
+    await removeLocalStorageValue('refreshToken');
+    throw err;
   }
 };
-let isRefreshing = false;
-let pendingRequests: Function[] = [];
 
-const setIsRefreshing = (value: boolean) => {
-  isRefreshing = value;
-};
-
-const addPendingRequest = (pendingRequest: Function) => {
-  pendingRequests.push(pendingRequest);
-};
-
-const resolvePendingRequests = () => {
-  pendingRequests.map((callback) => callback());
-  pendingRequests = [];
-};
-
-const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
-  if (graphQLErrors) {
-    for (const error of graphQLErrors) {
-      if (error.message === 'Unauthorized') {
-        let forward$;
-        if (!isRefreshing) {
-          setIsRefreshing(true);
-          forward$ = fromPromise(
-            refreshTokens().then((tokens) => {
-              const oldHeaders = operation.getContext().headers;
-              operation.setContext({
-                headers: {
-                  ...oldHeaders,
-                  authorization: `Bearer ${tokens.accessToken}`
-                }
+const errorLink = onError(
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    if (graphQLErrors) {
+      for (const err of graphQLErrors) {
+        switch (err.extensions.code) {
+          case 'UNAUTHENTICATED':
+            if (operation.operationName === 'RefreshToken') return;
+            return fromPromise(
+              refreshToken().catch((error) => {
+                return;
+              })
+            )
+              .filter((value) => Boolean(value))
+              .flatMap((accessToken) => {
+                const oldHeaders = operation.getContext().headers;
+                operation.setContext({
+                  headers: {
+                    ...oldHeaders,
+                    authorization: `Bearer ${accessToken}`,
+                  },
+                });
+                return forward(operation);
               });
-              resolvePendingRequests();
-            }).catch(() => {
-              pendingRequests = [];
-              return;
-            }).finally(() => {
-              setIsRefreshing(false);
-            })
-          );
-        } else {
-          forward$ = fromPromise(
-            new Promise<void>((resolve) => {
-              addPendingRequest(() => resolve());
-            })
-          );
         }
-        forward$.flatMap(() => {
-          return forward(operation);
-        });
-      }
-      else {
-        notification.error({
-          message: gqlErrors[error.message].errorTitle,
-          description: gqlErrors[error.message].errorDescription
-        });
       }
     }
-  }
-  if (networkError) {
-    return notification.error({
-      message: gqlErrors['Network error'].errorTitle,
-      description: gqlErrors['Network error'].errorDescription
-    });
-  }
-});
 
+    if (networkError) {
+      return notification.error({
+        message: gqlErrors['Network error'].errorTitle,
+        description: gqlErrors['Network error'].errorDescription
+      });
+    }
+  },
+);
+const authLink = setContext(async (operation, { headers }) => {
+  const token = returnTokenDependingOnOperation(operation);
+  return {
+    headers: {
+      ...headers,
+      authorization: `Bearer ${token}`,
+    },
+  };
+});
 export const client = new ApolloClient({
   link: from([errorLink, authLink, httpLink]),
   cache: new InMemoryCache()

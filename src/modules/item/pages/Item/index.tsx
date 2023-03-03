@@ -23,7 +23,6 @@ const Item = () => {
     <h3>{data?.getItem?.title}</h3>
     <p>{data?.getItem?.description}</p>
   </div>
-
 };
 
 export default Item;
