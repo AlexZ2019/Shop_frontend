@@ -1,8 +1,8 @@
 import { mergeArrays } from '../utils/reduceArrays';
 import auth from './auth';
 import { IModule } from './common/interfaces/moduleInterfaces';
-import home from "./home";
+import item from "./item";
 
-const routes = mergeArrays(auth.routes, home.routes);
+const routes = mergeArrays(auth.routes, item.routes);
 const module: IModule = { routes };
 export default module;
