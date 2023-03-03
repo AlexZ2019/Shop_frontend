@@ -118,22 +118,5 @@ const errorLink = onError(({ graphQLErrors, networkError, operation, forward }) 
 
 export const client = new ApolloClient({
   link: from([errorLink, authLink, httpLink]),
-  cache: new InMemoryCache({
-    typePolicies: {
-      Query: {
-        fields: {
-          getCitiesIds: {
-            keyArgs: false,
-            merge(existing = [], incoming) {
-              if (!existing.length) {
-                return incoming;
-              } else {
-                return [...existing, incoming[incoming.length - 1]];
-              }
-            }
-          }
-        }
-      }
-    }
-  })
+  cache: new InMemoryCache()
 });

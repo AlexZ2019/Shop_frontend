@@ -6,7 +6,6 @@ export const ITEMS_QUERY = gql`
             items {
                 id
                 title
-                description
             }
             total
         }
