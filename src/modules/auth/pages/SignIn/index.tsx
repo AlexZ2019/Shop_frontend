@@ -10,6 +10,8 @@ import styles from './index.module.css';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useLazyQuery, useMutation } from '@apollo/client';
+import { GoogleLogin } from "@react-oauth/google";
+import { LOGIN_WITH_GOOGLE_MUTATION } from "../../graphql/mutations/loginWithGoogle";
 
 const schema = yup.object().shape({
   email: yup.string().required().email(),
@@ -33,10 +35,18 @@ const SignIn = () => {
       setTokensToLocalStorage(tokens);
     }
   });
+  const [loginWithGoogle] = useMutation(LOGIN_WITH_GOOGLE_MUTATION, {
+    onCompleted: async (data: { loginWithGoogle: { accessToken: string; refreshToken: string } }) => {
+      const tokens = data.loginWithGoogle;
+      setTokensToLocalStorage(tokens);
+      await fetchUser();
+      navigate(RoutePaths.main);
+    }
+  });
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     await login({ variables: data });
     if (getLocalStorageValue('accessToken')) {
-      await fetchUser(); // needed to save a user to apollo cache
+      await fetchUser();
       navigate(RoutePaths.main);
     }
   };
@@ -55,6 +65,17 @@ const SignIn = () => {
         loading={loading}
         formProps={{ title: 'Login', submitButtonText: 'Login', redirectButtonText: 'Register',
           redirect: goToRegistration }}
+      />
+      <GoogleLogin
+        onSuccess={async (credentialResponse) => {
+          console.log(credentialResponse);
+          await loginWithGoogle({ variables: { token: credentialResponse.credential }});
+
+        }}
+        onError={() => {
+          console.log('Login Failed');
+        }}
+        useOneTap
       />
     </div>
   );

@@ -7,14 +7,18 @@ import 'antd/dist/antd.min.css';
 import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import { client } from './providers/apollo/config';
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import config from "./config";
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-    <React.StrictMode>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
-    </React.StrictMode>
+    <GoogleOAuthProvider clientId={config.client_id}>
+      <React.StrictMode>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </React.StrictMode>
+    </GoogleOAuthProvider>;
   </ApolloProvider>,
   document.getElementById('root')
 );

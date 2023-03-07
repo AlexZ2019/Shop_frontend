@@ -1521,6 +1521,11 @@
   resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.15.tgz#b8aebf101080057508b98cb5da4173c72c095db0"
   integrity sha512-CR4CEYJVY0OLyeLQi9N3Z2o4K47gXctvFxfZizDuW1xFtCJbA0eGvpjSLXEWHoY0hFjrlC6KinpdepGHVxhYIg==
 
+"@react-oauth/google@^0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@react-oauth/google/-/google-0.8.0.tgz#e95c9e2ef28f0da6d5de223e48c391a12eb4f821"
+  integrity sha512-xmIhYvvaBSblOzo3Fqv762lqub92SOFR8eRR7QpPyFPZEXZcOymaMuEkRSUKUrbu+9wfB8qtOaGMRJzrN7U2PA==
+
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.1.tgz#04bc0608f4aa4b2e4b1aebf284344d0f68fda283"
