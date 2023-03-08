@@ -1,4 +1,7 @@
 .page {
+  .items {
+    height: 80vh;
+  }
   .item {
     &:hover {
       cursor: pointer;

@@ -32,7 +32,7 @@ const Items = () => {
 
   return (
     <div className={styles.page}>
-      <Row justify="space-between" gutter={[60,8]} >
+      <Row justify="space-between" gutter={[60,8]} className={styles.items} >
         {data?.getItems?.items?.length
           && data?.getItems?.items.map((item: IItem) => {
             return <Col className={styles.item} span={8} md={8} sm={12} xs={24} key={item.id} onClick={() => showItem(item.id)}>
