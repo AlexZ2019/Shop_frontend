@@ -1,0 +1,13 @@
+.item {
+  text-align: left;
+}
+.item .backIcon svg {
+  width: 25px;
+  height: 25px;
+}
+.item .img {
+  margin: 50px 0;
+  width: 300px;
+}
+
+/*# sourceMappingURL=index.module.css.map */
