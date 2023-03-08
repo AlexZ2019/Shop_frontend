@@ -1,13 +1,15 @@
 import { useLazyQuery } from "@apollo/client";
 import { ITEMS_QUERY } from "../../graphql/queries/Items";
 import { useEffect } from "react";
-import { Alert, Col, Row, Spin, Image, Pagination } from "antd";
+import { Alert, Col, Row, Image, Button } from "antd";
 import { IItem } from "../../types";
 import itemDefaultImg from '../../../../assets/images/item_default.png';
 import Spiner from "../../../common/components/Spinner";
 import DefaultPagination from "../../../common/components/DefaultPagination";
 import { createSearchParams, useNavigate, useSearchParams } from "react-router-dom";
 import routePaths from "../../../../constants/routePaths";
+import styles from './index.module.css';
+import { useLogout } from "../../../auth/hooks/logout";
 
 const Items = () => {
   const navigate = useNavigate();
@@ -29,11 +31,11 @@ const Items = () => {
   }
 
   return (
-    <div>
-      <Row>
+    <div className={styles.page}>
+      <Row justify="space-between" gutter={[60,8]} >
         {data?.getItems?.items?.length
           && data?.getItems?.items.map((item: IItem) => {
-            return <Col span={8} key={item.id} onClick={() => showItem(item.id)}>
+            return <Col className={styles.item} span={8} md={8} sm={12} xs={24} key={item.id} onClick={() => showItem(item.id)}>
               <Image preview={false}
                      width={150}
                      src={item?.image || itemDefaultImg}

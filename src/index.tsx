@@ -18,7 +18,7 @@ ReactDOM.render(
           <App />
         </BrowserRouter>
       </React.StrictMode>
-    </GoogleOAuthProvider>;
+    </GoogleOAuthProvider>
   </ApolloProvider>,
   document.getElementById('root')
 );

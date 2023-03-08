@@ -1,17 +1,22 @@
+.loginButton {
+  background-color: #bcfabe;
+  color: #282c34;
+}
+
 .form {
   width: 300px;
   margin: auto;
   padding: 25px;
-  background: rgb(255, 195, 77);
+  background: #FFF;
   border-radius: 10px;
 
   button {
-    background-color: coral;
+    @extend .loginButton;
     &:hover {
-      background-color: coral;
+      @extend .loginButton;
     }
     &:focus {
-      background-color: coral;
+      @extend .loginButton;
     }
     border: none;
   }
@@ -21,9 +26,6 @@
   margin: 15px 0;
 }
 
-.formButton {
-  color: coral;
-}
 
 .errorMessage {
   height: 15px;

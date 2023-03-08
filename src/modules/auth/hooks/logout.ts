@@ -4,6 +4,7 @@ import { removeLocalStorageValue } from '../../../utils/localStorage';
 import routePaths from '../../../constants';
 import { client } from '../../../providers/apollo/config';
 import { LOGOUT_MUTATION } from '../graphql/mutations/logout';
+import RoutePaths from "../../../constants/routePaths";
 export const useLogout = () => {
   const apolloClient = useApolloClient();
   const navigate = useNavigate();
@@ -15,6 +16,6 @@ export const useLogout = () => {
     await apolloClient.clearStore();
     removeLocalStorageValue('accessToken');
     removeLocalStorageValue('refreshToken');
-    navigate(routePaths.signIn);
+    navigate(`../${RoutePaths.signIn}`);
   };
 };

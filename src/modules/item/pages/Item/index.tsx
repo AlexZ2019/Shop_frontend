@@ -4,6 +4,8 @@ import { useQuery } from "@apollo/client";
 import { ITEM_QUERY } from "../../graphql/queries/item";
 import defaultItemImg from '../../../../assets/images/item_default.png';
 import Spiner from "../../../common/components/Spinner";
+import styles from "./index.module.css"
+import { LeftSquareFilled } from "@ant-design/icons";
 
 const Item = () => {
   const navigate = useNavigate();
@@ -15,12 +17,12 @@ const Item = () => {
   if (loading) {
     return <Spiner spinnerType='main' customStyles=''/>
   }
-  return <div>
+  return <div className={styles.item}>
     <div>
-      <Button onClick={() => navigate(-1)}>Go back</Button>
+      <LeftSquareFilled onClick={() => navigate(-1)} className={styles.backIcon}/>
     </div>
-    <Image width={300} src={data?.getItem?.image || defaultItemImg}/>
-    <h3>{data?.getItem?.title}</h3>
+    <Image src={data?.getItem?.image || defaultItemImg} className={styles.img} preview={false}/>
+    <h2>{data?.getItem?.title}</h2>
     <p>{data?.getItem?.description}</p>
   </div>
 };

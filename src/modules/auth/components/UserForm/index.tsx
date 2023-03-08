@@ -1,7 +1,10 @@
-import { Button, Input } from 'antd';
+import { Button, Input, Row } from 'antd';
 import { Control, Controller, FieldError, FieldValues, SubmitHandler, UseFormHandleSubmit } from 'react-hook-form';
 import styles from './index.module.css';
 import { FC, ReactNode } from 'react';
+import { GoogleLogin } from "@react-oauth/google";
+import * as React from "react";
+import GoogleForm from "../GoogleLogin";
 
 type FormProps = {
   title: string;
@@ -48,12 +51,15 @@ const UserForm: FC<UserFormProps> = ({ onSubmit, handleSubmit, control, errors, 
         </div>
         );
       })}
-      <Button type="link" onClick={formProps.redirect} htmlType="submit" disabled={loading} className={styles.formButton}>
-        { formProps.redirectButtonText }
-      </Button>
-      <Button type="primary" htmlType="submit" loading={loading} disabled={loading} className={styles.formButton}>
-        { formProps.submitButtonText }
-      </Button>
+      <Row justify='space-between'>
+        <Button type="link" onClick={formProps.redirect} htmlType="submit" disabled={loading} className={styles.formButton}>
+          { formProps.redirectButtonText }
+        </Button>
+        <Button type="primary" htmlType="submit" loading={loading} disabled={loading} className={styles.formButton}>
+          { formProps.submitButtonText }
+        </Button>
+        <GoogleForm />
+      </Row>
     </form>
   );
 };
